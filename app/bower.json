@@ -1,0 +1,21 @@
+{
+  "name": "backlog",
+  "version": "0.0.1",
+  "authors": [
+    "Sebastian Mancke <s.mancke@tarent.de>"
+  ],
+  "description": "Simple backlog management tool",
+  "main": "index.html",
+  "keywords": [
+    "backlog",
+    "scrum",
+    "user",
+    "story",
+    "epic"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "~3.0.0"
+  }
+}
