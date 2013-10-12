@@ -95,14 +95,8 @@ $app->delete('/backlog/:backlogName/:storyid', wrap(function($backlogName,$story
         }))->name('deletestory');
 
 
-//$app->get('/backlog', 
-//          value(["myProject" => urlFor('stories', ['backlogName' => 'myProject']),
-//                 "scrumbacklog" => urlFor('stories', ['backlogName' => 'scrumbacklog']),
-//                 ])
-//          )->name("backlogs");
-//
-//$app->get('/', 
-//          value(["backlogs" => urlFor("backlogs")])
-//          )->name('index');
+$app->get('/', 
+          value(["backlogs" => urlFor("backlogs")])
+          )->name('index');
 
 $app->run();

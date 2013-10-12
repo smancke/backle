@@ -26,7 +26,7 @@
           </div>
            <div class="panel-body">
             <div class="row">              
-              <textarea class="col-md-4 form-control" id="some-textarea" style="height: 400px;">
+              <div class="col-md-8">
                 <h4>Requirements:</h4>
                 <ul>
                   <li>Es ist möglich bestehende Felder zu ändern (Neuer Wert oder auf Null-Wert zurück setzen)</li>
@@ -60,7 +60,7 @@
                   <li>Das ändern des Passwortes ist möglich</li>
                 <li>Die fehlerbehandung wird demonstriert</li>
                 </ul>
-              </textarea>
+              </div>
               <div class="col-md-4">
                 <br/>
                 <div class="row">
