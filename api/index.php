@@ -28,7 +28,7 @@ $app->post('/backlog', function () use ($app) {
             userError("Parameter backlogname ($bodyData->backlogname) not valid (/^[\w_-]+$/).");
         }
         if ($app->backlog->getBacklogIdByName($bodyData->backlogname) || $bodyData->backlogname == 'api') {
-            conflictError("Backlog name already in use.");
+            conflictError("Backlog name '".$bodyData->backlogname."' already in use.");
         }
         $id = $app->backlog->createBacklog($bodyData->backlogname);
         $app->response()->status(201);

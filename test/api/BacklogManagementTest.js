@@ -9,28 +9,36 @@ describe('Backlog api: ', function() {
         self = this;
         backlogName = 'test-backlog-'+ Math.random().toString(36).substring(2,7);
         
-        POST(
+        POST_BACKLOGS(
             {backlogname: backlogName}
         ).done(function(data, textStatus, jqXHR) {
             expect(data.backlogname).toEqual(backlogName);
-            backlogUri = jqXHR.getResponseHeader('Location');
+            backlogUri = jqXHR.getResponseHeader('Location');            
         }).fail(function(jqXHR, textStatus, errorThrown) {
             self.fail("failed with http status "+ jqXHR.status);
         });
     });
     
     describe('A backlog ressource', function(){
+
+        if('should be available by its uri', function() {
+            //TODO: implement
+        })
          
         it('should return the available backlogs', function() {
-            GET().done(function(data) {
+            GET('/api/backlog').done(function(data) {
                 expect(data.length).toBeGreaterThan(0);
+                var createdBacklog = jQuery.grep(data, function (value) {
+                    return value.backlogname == backlogName;
+                });
+                expect(createdBacklog.length).toBeGreaterThan(0);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 self.fail("failed with http status "+ jqXHR.status);
             });           
         });
         
         it('should not allow using the same backlog name twice', function() {
-            POST(
+            POST_BACKLOGS(
                 {backlogname: backlogName}
             ).done(function(data, textStatus, jqXHR) {
                 self.fail("failed with http status "+ jqXHR.status);
@@ -40,7 +48,7 @@ describe('Backlog api: ', function() {
         });
 
         it('should not allow to create backlogs with the name "api"', function() {
-            POST(
+            POST_BACKLOGS(
                 {backlogname: "api"}
             ).done(function(data, textStatus, jqXHR) {
                 self.fail("failed with http status "+ jqXHR.status);
@@ -52,27 +60,3 @@ describe('Backlog api: ', function() {
     });
 });
 
-function POST(data) {
-    return $.ajax({
-        url: '/api/backlog', async: false, type: 'POST',
-        data: JSON.stringify(data)
-    })
-}
-
-function GET() {
-    return $.ajax({
-        url: '/api/backlog', async: false                
-    })
-}
-
-function GET_DATA(url) {
-    var result;
-    return $.ajax({
-        url: url, async: false 
-    }).done(function(data) {
-        result = data;
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        expect("http get request with code 200").toEqual(jqXHR.status);
-    });
-    return result;
-}

@@ -67,10 +67,23 @@ class Backlog {
         $result = $this->query('SELECT backlogname FROM backlog', $this->db);
         return $this->fetchAll($result);
     }
-    
+
+    /**
+     * savely returns the property or '' if the object does not have the named property
+     */
+    private function prop($object, $propName) {
+        if (property_exists($object, $propName)) {
+            return $object->$propName;
+        }
+        return '';
+    }
+
     public function createStory($backlogName, $itemData) {
         $order = $this->getMinBacklogOrder($backlogName) - 1;
-        $result = mysql_query("INSERT INTO story (backlog_id, title, backlogorder, created, changed) VALUES ('". $this->getBacklogIdByName($backlogName) ."', '".$itemData->title."', '$order', NOW(), NOW())", $this->db);
+        if (! property_exists($itemData, 'status'))
+            $itemData->status = 'open';
+
+        $result = mysql_query("INSERT INTO story (backlog_id, title, text, detail, points, status, backlogorder, created) VALUES ('". $this->getBacklogIdByName($backlogName) ."', '".$this->prop($itemData, 'title')."', '".$this->prop($itemData, 'text')."', '".$this->prop($itemData, 'detail')."', '".$this->prop($itemData, 'points')."', '".$this->prop($itemData, 'status')."', '$order', NOW())", $this->db);
         return mysql_insert_id($this->db);
     }
 

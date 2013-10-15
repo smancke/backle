@@ -1,53 +1,48 @@
-var backlogList = angular.module('backlogList', ['ngResource']);
 
-backlogList.directive('contenteditable', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl) {
-            // view -> model
-            elm.on('blur', function() {
-                scope.$apply(function() {
-                    ctrl.$setViewValue(elm.html());
-                });
-            });
+backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($scope, Backlog, $http, $sce) {
 
-            // model -> view
-            ctrl.$render = function() {
-                elm.html(ctrl.$viewValue);
-            };
-            
-            elm.on('keydown', function(event) {
-                if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
-                    event.target.blur();
-                    return false;
-                }
-                else if (event.keyCode == 27) { // Esc
-                    elm.html(ctrl.$viewValue);
-                    event.target.blur();
-                }
-            });
-            
-            elm.on('click', function(event) {
-                this.focus();
-            });
-        }
-    }
-});
+    $scope.backlogname = global_backlogname;
 
-backlogList.factory('Backlog', function($resource){
-    return $resource('/backle/api/backlog/:backlog/:item', {backlog: 'scrumbacklog', item: '@id'}, {
-        query: {method:'GET', params:{}, isArray:true},
-        update: {method:'PUT', params:{}, isArray:false}
-    });
-});
+    $scope.backlog = $http.get('/backle/api/backlog/'+$scope.backlogname);
 
-backlogList.controller('ListCtrl', ['$scope', 'Backlog', '$http', function($scope, Backlog, $http) {
+    $scope.backlogPresent = false;
+
+    $scope.alertHtmlMessage = undefined;;
+    $scope.alertType = undefined;;
+
+    $scope.backlogItems;
+
+    Backlog.query()
+        .$promise.then(function(result) {
+            $scope.backlogItems = result;
+            $scope.backlogPresent = true;
+        },function() {
+            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\"/backle/app/create.php?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
+            $scope.alertType = 'alert alert-danger';
+            $scope.backlogPresent = false;
+        });
+
     $scope.moveStoryBefore = function(movingId, nextStoryId) {
         data = {nextStory: nextStoryId}
-        $http.put('/backle/api/backlog/scrumbacklog/'+movingId+'/moveStoryBefore', data);
+        $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveStoryBefore', data);
+        var from = $scope.getStoryPosition(movingId);
+        var to = $scope.getStoryPosition(nextStoryId);
+        if (to > from) {
+            to = to-1;
+        }
+        $scope.backlogItems.splice(to, 0, $scope.backlogItems.splice(from, 1)[0]);
     }
-
-    $scope.backlogItems = Backlog.query();
+    
+    /**
+     * Return the position within the list of stories
+     */
+    $scope.getStoryPosition = function(storyId) {
+        for (var i=0; i<$scope.backlogItems.length; i++) {
+            if ($scope.backlogItems[i].id == storyId) {
+                return i;
+            }
+        }
+    }
 
     $scope.addItem = function() {
         var newItem  = new Backlog();
@@ -94,13 +89,26 @@ backlogList.controller('ListCtrl', ['$scope', 'Backlog', '$http', function($scop
         } 
     };
 
+    /**
+     * returns the ellement with the given id from the given array.
+     */
+    $scope.getArrayElementById = function(elementArray, id) {
+        var resultList = jQuery.grep(elementArray, function (value) {
+            return value.id == id;
+        });
+        return resultList[0];
+    }
+
     $scope.$watch('backlogItems', function(newValue, oldValue) {
-        if (newValue.length != oldValue.length) {
+        if (newValue == undefined
+            || oldValue == undefined
+            || newValue.length != oldValue.length) {
             // add or delete .. already handeled above
             return;
         }
         for (var i = 0; i < newValue.length; i++) {
-            if (!angular.equals(newValue[i], oldValue[i])) {
+            var oldElement = $scope.getArrayElementById(oldValue, newValue[i].id);
+            if (!angular.equals(newValue[i], oldElement)) {
                 if (newValue[i].title == '') {
                     // Workarround for formating the content editable span
                     newValue[i].title = "&nbsp;";
@@ -110,27 +118,24 @@ backlogList.controller('ListCtrl', ['$scope', 'Backlog', '$http', function($scop
             }
         }
     }, true)
-}]);
 
-function connectSortables() {
     $( "#item-list" ).sortable({ 
         helper: 'clone',
         axis: 'y',  
         cursor: "move",
         stop: function(event, ui) {
-                movingId = ui.item.attr('id').substring(5);
-                if (ui.item.next().attr('id')) {
-                    nextId = ui.item.next().attr('id').substring(5);
-                } else {
-                    nextId = 'end';
-                }
-                
-                var $scope = angular.element(document.getElementsByTagName("body")[0]).scope();
-                $scope.$apply(function() {
-                    $scope.moveStoryBefore(movingId, nextId);
-                });
+            movingId = ui.item.attr('id').substring(5);
+            if (ui.item.next().attr('id')) {
+                nextId = ui.item.next().attr('id').substring(5);
+            } else {
+                nextId = 'end';
+            }
+            
+            //var $scope = angular.element(document.getElementsByTagName("body")[0]).scope();
+            $scope.$apply(function() {
+                $scope.moveStoryBefore(movingId, nextId);
+            });
         }
-});
-}
+    });
 
-$(function(){connectSortables()});
+}]);

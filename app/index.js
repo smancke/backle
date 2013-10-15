@@ -1,6 +1,5 @@
-var index = angular.module('index', []);
 
-index.controller('IndexCtrl', ['$scope', '$http', function($scope, $http) {
+backle.controller('IndexCtrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.backlogs = [];
 

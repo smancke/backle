@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="backle">
   <head>
     <title>VerA.web - modify a user (#4711)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="backle.css" type="text/css"/>
-    <link href="lib/bootstrap.css" rel="stylesheet" media="screen">
+    <? include('headSection.php') ?>
 
-    <script src="lib/jquery.js"></script>
-    <script src="lib/ui/jquery-ui.js"></script>
-    <script src="lib/angular.min.js"></script>
-    <script src="lib/angular-resource.min.js"></script>
-    <script src="./detail.js"></script>
-    
+    <script src="./common.js"></script>
+    <script src="./detail.js"></script>    
   </head>
   <body>
+<? include('header.php') ?>
 
      <br>
      <div class="container">
