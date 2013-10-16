@@ -22,9 +22,9 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             $scope.backlogPresent = false;
         });
 
-    $scope.moveStoryBefore = function(movingId, nextStoryId) {
-        data = {nextStory: nextStoryId}
-        $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveStoryBefore', data);
+    $scope.moveStoryBefore = function(movingId, previousStoryId) {
+        data = {previousStory: previousStoryId}
+        $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveStoryBehind', data);
         var from = $scope.getStoryPosition(movingId);
         var to = $scope.getStoryPosition(nextStoryId);
         if (to > from) {
@@ -44,12 +44,24 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         }
     }
 
-    $scope.addItem = function() {
+    /**
+     * creates a new story.
+     * 'placeBehindId': optional parameter, the story id to place the item behind
+     */
+    $scope.addItem = function(placeBehindId) {
         var newItem  = new Backlog();
         // Workarround for formating the content editable span
         newItem.title = "&nbsp;";
         newItem.$save(function(){
-            $scope.backlogItems.unshift( newItem );
+            var toPosition = 0;
+            if (placeBehindId) {
+                postData = {previousStory: placeBehindId}
+                $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveStoryBehind', data);
+                toPosition = $scope.getStoryPosition(placeBehindId) + 1;
+            } 
+            console.log("items %o",$scope.backlogItems);
+            $scope.backlogItems.splice(toPosition, 0, newItem);
+            console.log("items %o",$scope.backlogItems);
             window.setTimeout(function() {
                 element = $('#item-title-'+newItem.id);
                 element.focus();                
@@ -84,7 +96,8 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
 
     $scope.itemTitleKeyPressed = function(event) {
         if (event.ctrlKey && (event.keyCode == 13 || event.keyCode == 10)) { // enter
-            $scope.addItem();
+            var editingStoryId = $scope.getStoryIdByElement(event.target);
+            $scope.addItem(editingStoryId);
             return false;
         } 
     };
@@ -119,21 +132,25 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         }
     }, true)
 
+    $scope.getStoryIdByElement = function(storyWidget) {
+        var id = $(storyWidget).attr('id');
+        id = id.replace(/item-title-/, '');
+        id = id.replace(/item-/, '');
+        return id;
+    }
+
     $( "#item-list" ).sortable({ 
         helper: 'clone',
         axis: 'y',  
         cursor: "move",
         stop: function(event, ui) {
-            movingId = ui.item.attr('id').substring(5);
-            if (ui.item.next().attr('id')) {
-                nextId = ui.item.next().attr('id').substring(5);
-            } else {
-                nextId = 'end';
-            }
-            
-            //var $scope = angular.element(document.getElementsByTagName("body")[0]).scope();
+            var movingId = $scope.getStoryIdByElement(ui.item);
+            var previousId = 'begin';
+            if (ui.item.prev().attr('id')) {
+                previousId = $scope.getStoryIdByElement(ui.item.prev());
+            } 
             $scope.$apply(function() {
-                $scope.moveStoryBefore(movingId, nextId);
+                $scope.moveStoryBefore(movingId, previousId);
             });
         }
     });

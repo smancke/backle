@@ -68,15 +68,15 @@ $app->put('/backlog/:backlogName/:storyid', function ($backlogName, $storyid) us
         $id = $app->backlog->updateStory($backlogName, $storyid, $bodyData);
     });
 
-$app->put('/backlog/:backlogName/:storyid/moveStoryBefore', function ($backlogName, $storyid) use ($app) {
+$app->put('/backlog/:backlogName/:storyid/moveStoryBehind', function ($backlogName, $storyid) use ($app) {
         $bodyData = json_decode($app->request->getBody());
-        if (!$bodyData && ! preg_match('/^\d+$/', $bodyData->nextStory ) && $bodyData->nextStory != 'end') {
-            userError("Parameter nextStory not valid (/^\d+$/ or 'end').");
+        if (!$bodyData && ! preg_match('/^\d+$/', $bodyData->previousStory ) && $bodyData->previousStory != 'begin') {
+            userError("Parameter previousStory not valid (/^\d+$/ or 'begin').");
         }
-        if ($bodyData->nextStory == 'end') {
-            $app->backlog->moveStoryToEnd($backlogName, $storyid);
+        if ($bodyData->previousStory == 'begin') {
+            $app->backlog->moveStoryToBegin($backlogName, $storyid);
         } else {
-            $app->backlog->moveStoryBefore($backlogName, $storyid, $bodyData->nextStory);
+            $app->backlog->moveStoryBehind($backlogName, $storyid, $bodyData->previousStory);
         }
     });
 

@@ -92,23 +92,23 @@ class Backlog {
         $result = mysql_query("UPDATE story SET title = '".$itemData->title."', status = '".$itemData->status."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
     }
 
-    public function moveStoryToEnd($backlogName, $id) {
-        $this->query("UPDATE story SET backlogorder = ".($this->getMaxBacklogOrder($backlogName) +1)." WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
+    public function moveStoryToBegin($backlogName, $id) {
+        $this->query("UPDATE story SET backlogorder = ".($this->getMinBacklogOrder($backlogName) -1)." WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
     }
 
     /**
-     * Places the supplied storry before the nextStory story.
+     * Places the supplied story behind the previousStory story.
      * To achive this, the stories backlogorder are set to the same value
-     * and then all stories after the current story are advanced by one.
+     * and then all stories after the 'previousStory' are advanced by one.
      */
-    public function moveStoryBefore($backlogName, $id, $nextStoryId) {
-        $nextStory = $this->getStory($backlogName, $nextStoryId);
+    public function moveStoryBehind($backlogName, $id, $previousStoryId) {
+        $previousStory = $this->getStory($backlogName, $previousStoryId);
         
         // moving the story at the same position
-        $this->query("UPDATE story SET backlogorder = '".$nextStory['backlogorder']."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
+        $this->query("UPDATE story SET backlogorder = '".$previousStory['backlogorder']."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
         
         // moving all following stories one step down
-        $this->query("UPDATE story SET backlogorder = backlogorder +1 WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND not id = ".$id ." AND backlogorder >= ".$nextStory['backlogorder'], $this->db);
+        $this->query("UPDATE story SET backlogorder = backlogorder +1 WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND not id = ". $previousStoryId ." AND backlogorder >= ".$previousStory['backlogorder'], $this->db);
     }
     
     /**
@@ -120,14 +120,14 @@ class Backlog {
         return $row[0];
     }
 
-    /**
-     * Retuns the maximum value for a backlog order within a given backlog.
-     */
-    public function getMaxBacklogOrder($backlogName) {
-        $result = $this->query('SELECT MAX(backlogorder) FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName));
-        $row = mysql_fetch_row($result);
-        return $row[0];
-    }
+    //        /**
+    // * Retuns the maximum value for a backlog order within a given backlog.
+    // */
+    //public function getMaxBacklogOrder($backlogName) {
+    //    $result = $this->query('SELECT MAX(backlogorder) FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName));
+    //    $row = mysql_fetch_row($result);
+    //    return $row[0];
+    //}
 
     public function getBacklogIdByName($backlogName) {
         $result = $this->query("SELECT id FROM backlog WHERE backlogname = '".$backlogName."'");
