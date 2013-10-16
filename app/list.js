@@ -3,8 +3,6 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
 
     $scope.backlogname = global_backlogname;
 
-    $scope.backlog = $http.get('/backle/api/backlog/'+$scope.backlogname);
-
     $scope.backlogPresent = false;
 
     $scope.alertHtmlMessage = undefined;;

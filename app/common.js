@@ -49,9 +49,12 @@ backle.controller('CreateCtrl', ['$scope', '$http', '$sce', function($scope, $ht
     $scope.backlogPresent = false;
     
     if ($scope.backlogname) {
-        $scope.backlog = $http.get('/backle/api/backlog/'+$scope.backlogname)
-            .success(function() {
-                $scope.backlogPresent = true;
-            });
+        if (global_backlogname) {
+            $scope.backlogPresent = true;
+        }
+//        $scope.backlog = $http.get('/backle/api/backlog/'+$scope.backlogname)
+//            .success(function() {
+//                $scope.backlogPresent = true;
+//            });
     }
 }]);
