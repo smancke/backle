@@ -26,7 +26,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         data = {previousStory: previousStoryId}
         $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveStoryBehind', data);
         var from = $scope.getStoryPosition(movingId);
-        var to = $scope.getStoryPosition(nextStoryId);
+        var to = $scope.getStoryPosition(previousStoryId);
         if (to > from) {
             to = to-1;
         }
@@ -56,7 +56,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             var toPosition = 0;
             if (placeBehindId) {
                 postData = {previousStory: placeBehindId}
-                $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveStoryBehind', data);
+                $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveStoryBehind', postData);
                 toPosition = $scope.getStoryPosition(placeBehindId) + 1;
             } 
             console.log("items %o",$scope.backlogItems);
