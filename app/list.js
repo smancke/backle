@@ -26,11 +26,9 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         data = {previousStory: previousStoryId}
         $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveStoryBehind', data);
         var from = $scope.getStoryPosition(movingId);
-        var to = $scope.getStoryPosition(previousStoryId);
-        if (to > from) {
-            to = to-1;
-        }
-        $scope.backlogItems.splice(to, 0, $scope.backlogItems.splice(from, 1)[0]);
+        var removedItem = $scope.backlogItems.splice(from, 1)[0];
+        var to = 1 + $scope.getStoryPosition(previousStoryId);
+        $scope.backlogItems.splice(to, 0, removedItem);
     }
     
     /**
@@ -59,9 +57,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
                 $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveStoryBehind', postData);
                 toPosition = $scope.getStoryPosition(placeBehindId) + 1;
             } 
-            console.log("items %o",$scope.backlogItems);
             $scope.backlogItems.splice(toPosition, 0, newItem);
-            console.log("items %o",$scope.backlogItems);
             window.setTimeout(function() {
                 element = $('#item-title-'+newItem.id);
                 element.focus();                
