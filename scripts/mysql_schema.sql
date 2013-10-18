@@ -30,7 +30,7 @@ CREATE TABLE `backlog` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `backlogname_2` (`backlogname`),
   KEY `backlogname` (`backlogname`)
-) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1252 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,10 +51,10 @@ CREATE TABLE `story` (
   `detail` text COLLATE utf8_unicode_ci,
   `points` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `changed` datetime NOT NULL,
+  `changed` datetime DEFAULT NULL,
   `done` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=516 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,4 +80,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-12 22:01:34
+-- Dump completed on 2013-10-18 14:27:46
