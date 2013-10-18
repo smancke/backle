@@ -74,23 +74,59 @@ describe('Story api: ', function() {
             ).done(function(data, textStatus, jqXHR) {
                 storyUri = jqXHR.getResponseHeader('Location');
             })
-                   
+
+            // update of all fields
             PUT(createProxyURL(storyUri),
                  {
                      title: 'modify a user',                     
                      text: 'Als Produktverantwortlicher ...',
                      detail: 'bla bla',
-                     points: 13
+                     points: 13,
+                     status: 'done'
                  }
             ).done(function(data, textStatus, jqXHR) {
                 expect(data.title).toEqual('modify a user');
                 expect(data.text).toEqual('Als Produktverantwortlicher ...');
                 expect(data.detail).toEqual('bla bla');
                 expect(data.points).toEqual('13'); //TODO: This shoud be an integer
-                expect(data.status).toEqual('open');                
+                expect(data.status).toEqual('done');                
                 expect(data.backlogorder).toBeDefined();
                 expect(data.created).toBeDefined(); //TODO: Better test of date types
-                expect(data.changed).toBeNull(); 
+
+                // check update of date fields
+                expect(data.changed).not.toBeNull(); 
+                expect(data.done).not.toBeNull();
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });
+
+
+            // verify, that sending no fields has no impact
+            PUT(createProxyURL(storyUri),
+                 {}
+            ).done(function(data, textStatus, jqXHR) {
+                expect(data.title).toEqual('modify a user');
+                expect(data.text).toEqual('Als Produktverantwortlicher ...');
+                expect(data.detail).toEqual('bla bla');
+                expect(data.points).toEqual('13'); //TODO: This shoud be an integer
+                expect(data.status).toEqual('done');                
+                expect(data.backlogorder).toBeDefined();
+                expect(data.created).toBeDefined(); //TODO: Better test of date types
+
+                // check update of date fields
+                expect(data.changed).not.toBeNull(); 
+                expect(data.done).not.toBeNull();
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });
+
+            // verify, that done date is resetet on state change!='done'
+            PUT(createProxyURL(storyUri),
+                {status:'open'}
+            ).done(function(data, textStatus, jqXHR) {
+                expect(data.status).toEqual('open');                
                 expect(data.done).toBeNull();
 
             }).fail(function(jqXHR, textStatus, errorThrown) {

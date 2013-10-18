@@ -46,6 +46,15 @@ $app->get('/backlog/:backlogName', function($backlogName) use ($app) {
         echo json_encode($stories);
     })->name('stories');
 
+function getStory($app, $backlogName,$id) {
+    $story = $app->backlog->getStory($backlogName,$id);
+    if (!$story) {
+        notFoundError("Object not found: $backlogName");
+    }
+    $story['link_backlog'] = urlFor('stories', ['backlogName' => $backlogName]);
+    return $story;        
+}
+
 $app->post('/backlog/:backlogName', function ($backlogName) use ($app) {
         $bodyData = json_decode($app->request->getBody());
         if (!$bodyData) {
@@ -54,10 +63,7 @@ $app->post('/backlog/:backlogName', function ($backlogName) use ($app) {
         $id = $app->backlog->createStory($backlogName, $bodyData);
         $app->response()->status(201);
         Header("Location: ". urlFor('story', ['backlogName' => $backlogName, 'storyid' => $id]));
-
-        $story = $app->backlog->getStory($backlogName,$id);
-        $story['link_backlog'] = urlFor('stories', ['backlogName' => $backlogName]);
-        echo json_encode($story);        
+        echo json_encode(getStory($app, $backlogName, $id));
     });
 
 $app->put('/backlog/:backlogName/:storyid', function ($backlogName, $storyid) use ($app) {
@@ -65,7 +71,8 @@ $app->put('/backlog/:backlogName/:storyid', function ($backlogName, $storyid) us
         if (!$bodyData) {
             userError("Posted data not valid.");
         }
-        $id = $app->backlog->updateStory($backlogName, $storyid, $bodyData);
+        $app->backlog->updateStory($backlogName, $storyid, $bodyData);
+        echo json_encode(getStory($app, $backlogName, $storyid));
     });
 
 $app->put('/backlog/:backlogName/:storyid/moveStoryBehind', function ($backlogName, $storyid) use ($app) {
@@ -80,14 +87,8 @@ $app->put('/backlog/:backlogName/:storyid/moveStoryBehind', function ($backlogNa
         }
     });
 
-
 $app->get('/backlog/:backlogName/:storyid', wrap(function($backlogName,$storyid) use($app) {
-            $story = $app->backlog->getStory($backlogName,$storyid);
-            if (!$story) {
-                notFoundError("Object not found: $backlogName");
-            }
-            $story['link_backlog'] = urlFor('stories', ['backlogName' => $backlogName]);
-            return $story;
+            return getStory($app, $backlogName, $storyid);
         }))->name('story');
 
 $app->delete('/backlog/:backlogName/:storyid', wrap(function($backlogName,$storyid) use($app) {

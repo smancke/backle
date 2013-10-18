@@ -80,16 +80,35 @@ class Backlog {
 
     public function createStory($backlogName, $itemData) {
         $order = $this->getMinBacklogOrder($backlogName) - 1;
-        if (! property_exists($itemData, 'status'))
+        if (! property_exists($itemData, 'status') || !$itemData->status )
             $itemData->status = 'open';
+
+        if (! property_exists($itemData, 'detail') || !$itemData->detail )
+            $itemData->detail = "<p><strong>Requirements</strong></p><ul><li>...</li></ul><p><strong>Constraints</strong></p><ul><li>...</li></ul><p><strong>User Acceptance Criteria</strong></p><ul><li>...</li></ul><p><strong>User Acceptance Tests</strong></p><ul><li>...</li></ul><p>&nbsp;</p>";
 
         $result = mysql_query("INSERT INTO story (backlog_id, title, text, detail, points, status, backlogorder, created) VALUES ('". $this->getBacklogIdByName($backlogName) ."', '".$this->prop($itemData, 'title')."', '".$this->prop($itemData, 'text')."', '".$this->prop($itemData, 'detail')."', '".$this->prop($itemData, 'points')."', '".$this->prop($itemData, 'status')."', '$order', NOW())", $this->db);
         return mysql_insert_id($this->db);
     }
 
-
     public function updateStory($backlogName, $id, $itemData) {
-        $result = mysql_query("UPDATE story SET title = '".$itemData->title."', status = '".$itemData->status."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
+        $fields = ['title', 'text', 'detail', 'status', 'points'];
+        $q = "UPDATE story SET ";
+        foreach ($fields as $field) {
+            if (property_exists($itemData, $field)) {
+                $q .= $field ." = '" . $itemData->$field ."', ";
+            }
+        }
+        $q .= "changed = NOW()";
+        if (property_exists($itemData, 'status')) {
+            if ($itemData->status == 'done') {
+                $q .= ", done = NOW()";
+            } else {
+                $q .= ", done = null";
+            }
+        }
+        $q .= " WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id;
+        error_log($q);
+        $result = mysql_query($q);
     }
 
     public function moveStoryToBegin($backlogName, $id) {
@@ -119,15 +138,6 @@ class Backlog {
         $row = mysql_fetch_row($result);
         return $row[0];
     }
-
-    //        /**
-    // * Retuns the maximum value for a backlog order within a given backlog.
-    // */
-    //public function getMaxBacklogOrder($backlogName) {
-    //    $result = $this->query('SELECT MAX(backlogorder) FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName));
-    //    $row = mysql_fetch_row($result);
-    //    return $row[0];
-    //}
 
     public function getBacklogIdByName($backlogName) {
         $result = $this->query("SELECT id FROM backlog WHERE backlogname = '".$backlogName."'");

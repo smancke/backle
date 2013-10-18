@@ -1,3 +1,4 @@
+var backle = angular.module('backle', ['ngResource']);
 
 backle.controller('IndexCtrl', ['$scope', '$http', function($scope, $http) {
 

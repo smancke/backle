@@ -11,5 +11,6 @@
     <script>
      <?php 
      echo "    global_backlogname = '" . $_GET['backlogname'] ."'\n";
+     echo "    global_storyid = '" . $_GET['storyid'] ."'\n";
      ?>
     </script>

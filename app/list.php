@@ -5,8 +5,8 @@
 
     <? include('headSection.php') ?>
     
-    <script src="./common.js"></script>
     <script src="./list.js"></script>
+    <script src="./common.js"></script>
   </head>
   <body>
     
@@ -30,7 +30,7 @@
         <div class="row">
         <div class="col-md-7 col-md-offset-1" id="item-list">
           <div id="item-{{backlogItem.id}}" class="backlog-list-item {{backlogItem.status}}" ng-repeat="backlogItem in backlogItems" ng-click="focus($event)">
-            <a href="detail.php?backlogname={{backlogname}}">#{{backlogItem.id}}</a> 
+            <a href="detail.php?backlogname={{backlogname}}&storyid={{backlogItem.id}}">#{{backlogItem.id}}</a> 
             <span class="backlog-item-title" id="item-title-{{backlogItem.id}}" contentEditable="true" ng-model="backlogItem.title" ng-keypress="itemTitleKeyPressed($event)"></span>
             <div class="backlog-item-buttons">
               <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">

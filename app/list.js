@@ -1,3 +1,39 @@
+var backle = angular.module('backle', ['ngResource']);
+
+backle.directive('contenteditable', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            // view -> model
+            elm.on('blur', function() {
+                scope.$apply(function() {
+                    ctrl.$setViewValue(elm.html());
+                });
+            });
+
+            // model -> view
+            ctrl.$render = function() {
+                elm.html(ctrl.$viewValue);
+            };
+            
+            elm.on('keydown', function(event) {
+                if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
+                    event.target.blur();
+                    return false;
+                }
+                else if (event.keyCode == 27) { // Esc
+                    elm.html(ctrl.$viewValue);
+                    event.target.blur();
+                }
+            });
+            
+            elm.on('click', function(event) {
+                this.focus();
+            });
+        }
+    }
+});
+
 
 backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($scope, Backlog, $http, $sce) {
 
@@ -148,5 +184,6 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             });
         }
     });
+
 
 }]);
