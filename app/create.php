@@ -5,8 +5,8 @@
 
     <? include('headSection.php') ?>
     
-    <script src="./common.js"></script>
     <script src="./create.js"></script>
+    <script src="./common.js"></script>
   </head>
   <body ng-controller="CreateCtrl">
 <? include('header.php') ?>
