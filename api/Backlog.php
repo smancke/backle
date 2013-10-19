@@ -78,21 +78,32 @@ class Backlog {
         return '';
     }
 
-    public function createStory($backlogName, $itemData) {
+    public function createItem($backlogName, $itemData) {
         $order = $this->getMinBacklogOrder($backlogName) - 1;
         if (! property_exists($itemData, 'status') || !$itemData->status )
             $itemData->status = 'open';
 
+        if (! property_exists($itemData, 'type') || !$itemData->type )
+            $itemData->type = 'story';
+
         if (! property_exists($itemData, 'detail') || !$itemData->detail )
             $itemData->detail = "<p><strong>Requirements</strong></p><ul><li>...</li></ul><p><strong>Constraints</strong></p><ul><li>...</li></ul><p><strong>User Acceptance Criteria</strong></p><ul><li>...</li></ul><p><strong>User Acceptance Tests</strong></p><ul><li>...</li></ul><p>&nbsp;</p>";
 
-        $result = mysql_query("INSERT INTO story (backlog_id, title, text, detail, points, status, backlogorder, created) VALUES ('". $this->getBacklogIdByName($backlogName) ."', '".$this->prop($itemData, 'title')."', '".$this->prop($itemData, 'text')."', '".$this->prop($itemData, 'detail')."', '".$this->prop($itemData, 'points')."', '".$this->prop($itemData, 'status')."', '$order', NOW())", $this->db);
+        $result = mysql_query("INSERT INTO item (backlog_id, type, title, text, detail, points, status, backlogorder, created) VALUES ('"
+                              . $this->getBacklogIdByName($backlogName) 
+                              ."', '".$this->prop($itemData, 'type')
+                              ."', '".$this->prop($itemData, 'title')
+                              ."', '".$this->prop($itemData, 'text')
+                              ."', '".$this->prop($itemData, 'detail')
+                              ."', '".$this->prop($itemData, 'points')
+                              ."', '".$this->prop($itemData, 'status')
+                              ."', '$order', NOW())", $this->db);
         return mysql_insert_id($this->db);
     }
 
-    public function updateStory($backlogName, $id, $itemData) {
-        $fields = ['title', 'text', 'detail', 'status', 'points'];
-        $q = "UPDATE story SET ";
+    public function updateItem($backlogName, $id, $itemData) {
+        $fields = ['type', 'title', 'text', 'detail', 'status', 'points'];
+        $q = "UPDATE item SET ";
         foreach ($fields as $field) {
             if (property_exists($itemData, $field)) {
                 $q .= $field ." = '" . $itemData->$field ."', ";
@@ -111,30 +122,30 @@ class Backlog {
         $result = mysql_query($q);
     }
 
-    public function moveStoryToBegin($backlogName, $id) {
-        $this->query("UPDATE story SET backlogorder = ".($this->getMinBacklogOrder($backlogName) -1)." WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
+    public function moveItemToBegin($backlogName, $id) {
+        $this->query("UPDATE item SET backlogorder = ".($this->getMinBacklogOrder($backlogName) -1)." WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
     }
 
     /**
-     * Places the supplied story behind the previousStory story.
+     * Places the supplied item behind the previousItem item.
      * To achive this, the stories backlogorder are set to the same value
-     * and then all stories after the 'previousStory' are advanced by one.
+     * and then all stories after the 'previousItem' are advanced by one.
      */
-    public function moveStoryBehind($backlogName, $id, $previousStoryId) {
-        $previousStory = $this->getStory($backlogName, $previousStoryId);
+    public function moveItemBehind($backlogName, $id, $previousItemId) {
+        $previousItem = $this->getItem($backlogName, $previousItemId);
         
-        // moving the story at the same position
-        $this->query("UPDATE story SET backlogorder = '".$previousStory['backlogorder']."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
+        // moving the item at the same position
+        $this->query("UPDATE item SET backlogorder = '".$previousItem['backlogorder']."' WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND id = ".$id, $this->db);
         
         // moving all following stories one step down
-        $this->query("UPDATE story SET backlogorder = backlogorder +1 WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND not id = ". $previousStoryId ." AND backlogorder >= ".$previousStory['backlogorder'], $this->db);
+        $this->query("UPDATE item SET backlogorder = backlogorder +1 WHERE backlog_id = ".$this->getBacklogIdByName($backlogName) ." AND not id = ". $previousItemId ." AND backlogorder >= ".$previousItem['backlogorder'], $this->db);
     }
     
     /**
      * Retuns the minimal value for a backlog order within a given backlog.
      */
     public function getMinBacklogOrder($backlogName) {
-        $result = $this->query('SELECT MIN(backlogorder) FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName));
+        $result = $this->query('SELECT MIN(backlogorder) FROM item WHERE backlog_id = '.$this->getBacklogIdByName($backlogName));
         $row = mysql_fetch_row($result);
         return $row[0];
     }
@@ -161,25 +172,25 @@ class Backlog {
     /**
      * Returns all Stories within the backlog
      */
-    public function getStories($backlogName) {
-        $result = $this->query('SELECT id, title, text, status, backlogorder, points FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName).' ORDER BY backlogorder', $this->db);
+    public function getItems($backlogName) {
+        $result = $this->query('SELECT id, type, title, text, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = '.$this->getBacklogIdByName($backlogName).' ORDER BY backlogorder', $this->db);
         return $this->fetchAll($result);
     }
 
     /**
-     * Returns one Story within the backlog
+     * Returns one Item within the backlog
      */
-    public function getStory($backlogName, $id) {
-        $result = $this->query('SELECT id, title, text, detail, status, backlogorder, points, done, created, changed FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName) .' AND id = '.$id, $this->db);
+    public function getItem($backlogName, $id) {
+        $result = $this->query('SELECT id, type, title, text, detail, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = '.$this->getBacklogIdByName($backlogName) .' AND id = '.$id, $this->db);
         return mysql_fetch_assoc($result);
     }
 
 
     /**
-     * Delete one Story within the backlog
+     * Delete one Item within the backlog
      */
-    public function deleteStory($backlogName, $id) {
-        $result = $this->query('DELETE FROM story WHERE backlog_id = '.$this->getBacklogIdByName($backlogName) .' AND id = '.$id, $this->db);
+    public function deleteItem($backlogName, $id) {
+        $result = $this->query('DELETE FROM item WHERE backlog_id = '.$this->getBacklogIdByName($backlogName) .' AND id = '.$id, $this->db);
     }
 
     public function close() {

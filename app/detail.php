@@ -33,8 +33,8 @@
      <div class="container" ng-controller="DetailCtrl">
        <div class="panel panel-success">
          <div class="panel-heading">
-           <h3 id="headline"><a href="#" editable-text="story.title">{{story.title || 'click to edit'}}</a></h3>
-           <a href="#" editable-text="story.text">{{story.text || 'click to edit'}}</a>
+           <h3 id="headline"><a href="#" editable-text="story.title">{{story.title || 'edit ..'}}</a></h3>
+           <a href="#" editable-text="story.text">{{story.text || 'edit ..'}}</a>
           </div>
            <div class="panel-body">
             <div class="row">       
@@ -45,7 +45,7 @@
                   <!-- <div class="col-xs-4"><strong>Sprint</strong></div> <div class="col-xs-3">3</div> -->
                 </div>
                 <div class="row">
-                <div class="col-xs-4"><strong>StoryPoints</strong></div> <a href="#" class="col-xs-3" editable-select="story.points" buttons="no" e-ng-options="s.value as s.text for s in points">{{ showPoints() }}</a>
+                <div class="col-xs-4"><strong>StoryPoints</strong></div> <a href="#" class="col-xs-3" editable-text="story.points" e-style="width: 60px">{{story.points || 'edit ..'}}</a>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->

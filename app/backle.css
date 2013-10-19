@@ -13,7 +13,8 @@ html * {
     padding-left: 15px;
     padding-top: 7px;
     padding-bottom: 4px;
-    margin-bottom: 3px;
+    margin-top: 0px;
+    border-bottom: 1px solid #cccccc;
     cursor: move;
 }
 
@@ -34,6 +35,7 @@ html * {
 }
 
 .backlog-list-item:hover .backlog-item-buttons {
+    visibility: visible;
     display: inline;
     margin: 0px;
     padding: 0px;
@@ -46,7 +48,13 @@ html * {
 }
 
 .backlog-item-buttons {
-    display: none;
+    visibility: hidden;
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+}
+
+.backlog-item-right {
     margin: 0px;
     padding: 0px;
     float: right;
@@ -56,5 +64,43 @@ html * {
     margin: 5px;
     padding: 4px;
     padding-bottom: 2px;
+}
+
+
+.milestone > .detail-link {
+    display: none;
+}
+
+.milestone .backlog-item-title {
+    font-weight:bold;
+}
+
+.milestone {
+    display: block;
+    padding: 0px;
+    margin-bottom: 6px;
+    margin-top: 0px;
+    cursor: move;
+
+    background-color: inherit;
+    border-radius: 2px;
+    padding-bottom: 4px;
+    margin-top: 0px;
+    border-bottom: 0px;
+    cursor: move;
+}
+
+.milestone > .milestone-block {
+    display: block;
+    width: 220px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    margin-top: 0px;
+    margin-left: auto;
+    cursor: move;
 }
 

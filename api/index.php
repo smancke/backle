@@ -39,20 +39,20 @@ $app->get('/backlog/:backlogName', function($backlogName) use ($app) {
         if (! $app->backlog->isReadeableForUser($backlogName)) {
             notFoundError("Object not found: $backlogName");
         }
-        $stories = $app->backlog->getStories($backlogName);
+        $stories = $app->backlog->getItems($backlogName);
         for ($i=0; $i<count($stories); $i++) {
-            $stories[$i]['self'] = urlFor('story', ['backlogName' => $backlogName, 'storyid' => $stories[$i]['id']]);
+            $stories[$i]['self'] = urlFor('item', ['backlogName' => $backlogName, 'itemid' => $stories[$i]['id']]);
         }
         echo json_encode($stories);
     })->name('stories');
 
-function getStory($app, $backlogName,$id) {
-    $story = $app->backlog->getStory($backlogName,$id);
-    if (!$story) {
+function getItem($app, $backlogName,$id) {
+    $item = $app->backlog->getItem($backlogName,$id);
+    if (!$item) {
         notFoundError("Object not found: $backlogName");
     }
-    $story['link_backlog'] = urlFor('stories', ['backlogName' => $backlogName]);
-    return $story;        
+    $item['link_backlog'] = urlFor('stories', ['backlogName' => $backlogName]);
+    return $item;        
 }
 
 $app->post('/backlog/:backlogName', function ($backlogName) use ($app) {
@@ -60,40 +60,40 @@ $app->post('/backlog/:backlogName', function ($backlogName) use ($app) {
         if (!$bodyData) {
             userError("Posted data not valid.");
         }
-        $id = $app->backlog->createStory($backlogName, $bodyData);
+        $id = $app->backlog->createItem($backlogName, $bodyData);
         $app->response()->status(201);
-        Header("Location: ". urlFor('story', ['backlogName' => $backlogName, 'storyid' => $id]));
-        echo json_encode(getStory($app, $backlogName, $id));
+        Header("Location: ". urlFor('item', ['backlogName' => $backlogName, 'itemid' => $id]));
+        echo json_encode(getItem($app, $backlogName, $id));
     });
 
-$app->put('/backlog/:backlogName/:storyid', function ($backlogName, $storyid) use ($app) {
+$app->put('/backlog/:backlogName/:itemid', function ($backlogName, $itemid) use ($app) {
         $bodyData = json_decode($app->request->getBody());
         if (!$bodyData) {
             userError("Posted data not valid.");
         }
-        $app->backlog->updateStory($backlogName, $storyid, $bodyData);
-        echo json_encode(getStory($app, $backlogName, $storyid));
+        $app->backlog->updateItem($backlogName, $itemid, $bodyData);
+        echo json_encode(getItem($app, $backlogName, $itemid));
     });
 
-$app->put('/backlog/:backlogName/:storyid/moveStoryBehind', function ($backlogName, $storyid) use ($app) {
+$app->put('/backlog/:backlogName/:itemid/moveItemBehind', function ($backlogName, $itemid) use ($app) {
         $bodyData = json_decode($app->request->getBody());
-        if (!$bodyData && ! preg_match('/^\d+$/', $bodyData->previousStory ) && $bodyData->previousStory != 'begin') {
-            userError("Parameter previousStory not valid (/^\d+$/ or 'begin').");
+        if (!$bodyData && ! preg_match('/^\d+$/', $bodyData->previousItem ) && $bodyData->previousItem != 'begin') {
+            userError("Parameter previousItem not valid (/^\d+$/ or 'begin').");
         }
-        if ($bodyData->previousStory == 'begin') {
-            $app->backlog->moveStoryToBegin($backlogName, $storyid);
+        if ($bodyData->previousItem == 'begin') {
+            $app->backlog->moveItemToBegin($backlogName, $itemid);
         } else {
-            $app->backlog->moveStoryBehind($backlogName, $storyid, $bodyData->previousStory);
+            $app->backlog->moveItemBehind($backlogName, $itemid, $bodyData->previousItem);
         }
     });
 
-$app->get('/backlog/:backlogName/:storyid', wrap(function($backlogName,$storyid) use($app) {
-            return getStory($app, $backlogName, $storyid);
-        }))->name('story');
+$app->get('/backlog/:backlogName/:itemid', wrap(function($backlogName,$itemid) use($app) {
+            return getItem($app, $backlogName, $itemid);
+        }))->name('item');
 
-$app->delete('/backlog/:backlogName/:storyid', wrap(function($backlogName,$storyid) use($app) {
-            $story = $app->backlog->deleteStory($backlogName,$storyid);
-        }))->name('deletestory');
+$app->delete('/backlog/:backlogName/:itemid', wrap(function($backlogName,$itemid) use($app) {
+            $item = $app->backlog->deleteItem($backlogName,$itemid);
+        }))->name('deleteitem');
 
 
 $app->get('/', 
