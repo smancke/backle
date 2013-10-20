@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * TODO: Prevent from SQL Injection e.g. with prepared statements

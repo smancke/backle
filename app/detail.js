@@ -70,7 +70,7 @@ backle.directive('ckedit', function ($parse) {
 });
 
 backle.factory('Story', function($resource){
-    return $resource('/backle/api/backlog/' + global_backlogname + '/' + global_storyid , {}, {
+    return $resource(global_basepath +'/api/backlog/' + global_backlogname + '/' + global_storyid , {}, {
         query: {method:'GET', params:{}, isArray:false},
         update: {method:'PUT', params:{}, isArray:false}
     });
@@ -78,7 +78,7 @@ backle.factory('Story', function($resource){
 
 backle.controller('DetailCtrl', ['$scope', '$http', '$sce', '$filter', function($scope, $http, $sce, $filter) {
 
-    $scope.storyUri = '/backle/api/backlog/' + global_backlogname + '/' + global_storyid;
+    $scope.storyUri = global_basepath +'/api/backlog/' + global_backlogname + '/' + global_storyid;
 
     $scope.alertHtmlMessage = undefined;
     $scope.alertType = undefined;

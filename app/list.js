@@ -1,5 +1,23 @@
 var backle = angular.module('backle', ['ngResource']);
 
+// jquery-plugin for text selection
+jQuery.fn.selectText = function() {
+  var range, selection;
+  return this.each(function() {
+    if (document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(this);
+      range.select();
+    } else if (window.getSelection) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(this);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  });
+}
+
 backle.directive('contenteditable', function() {
     return {
         require: 'ngModel',
@@ -7,13 +25,25 @@ backle.directive('contenteditable', function() {
             // view -> model
             elm.on('blur', function() {
                 scope.$apply(function() {
-                    ctrl.$setViewValue(elm.html());
+                    var html = elm.html();
+                    html = html.replace(/&nbsp;/g, ' ');
+                    html = $.trim(html);
+                    ctrl.$setViewValue(html);
+                    if (ctrl.$viewValue == '' || ctrl.$viewValue == ' ') {
+                        elm.html('&nbsp;');
+                    } else {
+                        elm.html(html);
+                    }
                 });
             });
 
             // model -> view
             ctrl.$render = function() {
-                elm.html(ctrl.$viewValue);
+                if (ctrl.$viewValue == '' || ctrl.$viewValue == ' ') {
+                    elm.html('&nbsp;'); // workarround to prevent collapsing the editable field
+                } else {
+                    elm.html(ctrl.$viewValue);
+                }
             };
             
             elm.on('keydown', function(event) {
@@ -58,19 +88,18 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             $scope.backlogPresent = true;
             $scope.recalculateMilestonePoints();
         },function() {
-            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\"/backle/app/create.php?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
+            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\""+ global_basepath +"/app/create.php?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
             $scope.alertType = 'alert alert-danger';
             $scope.backlogPresent = false;
         });
 
     $scope.moveStoryBefore = function(movingId, previousItemId) {
         data = {previousItem: previousItemId}
-        $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveItemBehind', data);
+        $http.put(global_basepath + '/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveItemBehind', data);
         var from = $scope.getStoryPosition(movingId);
         var removedItem = $scope.backlogItems.splice(from, 1)[0];
         var to = 1 + $scope.getStoryPosition(previousItemId);
         $scope.backlogItems.splice(to, 0, removedItem);
-        $scope.recalculateMilestonePoints();
     }
 
     /**
@@ -78,6 +107,8 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
      *
      */
     $scope.recalculateMilestonePoints = function() {
+        if ($scope.backlogItems == undefined)
+            return;
         var total = 0;
         var sum = 0;
         for (var i=0; i<$scope.backlogItems.length; i++) {
@@ -117,8 +148,6 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
      */
     $scope.addItem = function(placeBehindId, isMilestone) {
         var newItem  = new Backlog();
-        // Workarround for formating the content editable span
-        newItem.title = "&nbsp;";
         if (isMilestone) {
             newItem.type = 'milestone';
             newItem.title = 'Sprint #';
@@ -127,7 +156,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             var toPosition = 0;
             if (placeBehindId) {
                 postData = {previousItem: placeBehindId}
-                $http.put('/backle/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveItemBehind', postData);
+                $http.put(global_basepath +'/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveItemBehind', postData);
                 toPosition = $scope.getStoryPosition(placeBehindId) + 1;
             } 
             $scope.backlogItems.splice(toPosition, 0, newItem);
@@ -156,10 +185,27 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     $scope.focus = function(event) {
         window.setTimeout(function() {
             var span = $(event.target); 
-            if (!span.hasClass("backlog-item-title")) {
+
+            // the main element,
+            // so we select the title child element
+            if (span.hasClass("backlog-list-item")) {
                 span = span.find(".backlog-item-title")[0];
-            }
-            span.focus();
+                span.focus();
+            } 
+            // the points badge was clicked,
+            // so we select the text within this
+            else if (span.hasClass("badge")) {
+                span = span.find('span').first();
+                span.focus();
+                span.selectText();
+            } 
+            // the badge contenteditable clicked,
+            // so we select the text within this
+            else if (span.hasClass("badge-text")) {
+                span.selectText();
+            } 
+            // 
+            // else ... on any other subelement, we do nothing!
         });
     };
 
@@ -182,6 +228,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     }
 
     $scope.$watch('backlogItems', function(newValue, oldValue) {
+        $scope.recalculateMilestonePoints();
         if (newValue == undefined
             || oldValue == undefined
             || newValue.length != oldValue.length) {
@@ -191,11 +238,6 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         for (var i = 0; i < newValue.length; i++) {
             var oldElement = $scope.getArrayElementById(oldValue, newValue[i].id);
             if (!angular.equals(newValue[i], oldElement)) {
-                if (newValue[i].title == '') {
-                    // Workarround for formating the content editable span
-                    newValue[i].title = "&nbsp;";
-                    return; // return, because the change fires watch again
-                }
                 newValue[i].$update();
             }
         }

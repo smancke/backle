@@ -1,4 +1,5 @@
-<?
+<?php
+
 /**
  * Creates a callable, which executes the callable
  * and echos the returnd result, converted to json

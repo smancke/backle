@@ -3,15 +3,15 @@
   <head>
     <title>Backlog</title>
 
-    <? include('headSection.php') ?>
+    <?php include('headSection.php') ?>
     
-    <script src="./list.js"></script>
-    <script src="./common.js"></script>
+    <script src="<?=cfg_basepath()?>/app/list.js"></script>
+    <script src="<?=cfg_basepath()?>/app/common.js"></script>
   </head>
   <body>
     
-    <? include('header.php') ?>
-    
+    <?php include('header.php') ?>
+
     <!-- content -->
     <br>
     <div ng-controller="ListCtrl">
@@ -41,7 +41,7 @@
                  ng-repeat="backlogItem in backlogItems" 
                  ng-click="focus($event)">
 
-              <a class="detail-link" href="detail.php?backlogname={{backlogname}}&storyid={{backlogItem.id}}">#{{backlogItem.id}}</a> 
+              <a class="detail-link" href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a> 
               <span class="milestone-block">
                 <span id="item-title-{{backlogItem.id}}"
                       class="backlog-item-title"
@@ -50,7 +50,7 @@
                       ng-keypress="itemTitleKeyPressed($event)"></span>
                 
                 <div class="backlog-item-right">
-                  <span class="badge" style="min-width:32px;">{{backlogItem.points}}</span>
+                  <span class="badge" style="min-width:32px;" ng-click="focus($event)"><span class="badge-text" contenteditable="true" ng-model="backlogItem.points"></span></span>
                   <div class="backlog-item-buttons">
                     <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">
                       <div class="glyphicon glyphicon-ok"></div></a>

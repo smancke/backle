@@ -30,20 +30,21 @@ CREATE TABLE `backlog` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `backlogname_2` (`backlogname`),
   KEY `backlogname` (`backlogname`)
-) ENGINE=InnoDB AUTO_INCREMENT=1252 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1342 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `story`
+-- Table structure for table `item`
 --
 
-DROP TABLE IF EXISTS `story`;
+DROP TABLE IF EXISTS `item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `story` (
+CREATE TABLE `item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `backlog_id` int(11) NOT NULL,
   `author_id` int(11) NOT NULL,
+  `type` enum('story','milestone') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'story',
   `status` enum('open','done') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'open',
   `backlogorder` int(11) NOT NULL,
   `title` varchar(400) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -54,7 +55,7 @@ CREATE TABLE `story` (
   `changed` datetime DEFAULT NULL,
   `done` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=516 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=909 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,4 +81,5 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-18 14:27:46
+-- Dump completed on 2013-10-19  2:15:14
+Scan right index finger on UPEK Eikon 2

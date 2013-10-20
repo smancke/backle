@@ -1,15 +1,19 @@
-<!DOCTYPE html>
+<?php
+
+require_once '../config.php';
+
+?><!DOCTYPE html>
 <html ng-app="backle">
   <head>
     <title>Create Backlog</title>
 
-    <? include('headSection.php') ?>
+    <?php include('headSection.php') ?>
     
-    <script src="./create.js"></script>
-    <script src="./common.js"></script>
+    <script src="<?=cfg_basepath()?>/app/create.js"></script>
+    <script src="<?=cfg_basepath()?>/app/common.js"></script>
   </head>
   <body ng-controller="CreateCtrl">
-<? include('header.php') ?>
+<?php include('header.php') ?>
 
     <br>
     <div class="thumbnail center well text-center">
