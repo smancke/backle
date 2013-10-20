@@ -1,6 +1,6 @@
 
 backle.factory('Backlog', function($resource){
-    return $resource('/backle/api/backlog/:backlog/:item', {backlog: global_backlogname, item: '@id'}, {
+    return $resource(global_backlogname + '/api/backlog/:backlog/:item', {backlog: global_backlogname, item: '@id'}, {
         query: {method:'GET', params:{}, isArray:true},
         update: {method:'PUT', params:{}, isArray:false}
     });
