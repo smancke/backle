@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="backle">
+<html ng-app="backle" ng-controller="DetailCtrl">
   <head>
-    <title>VerA.web - modify a user (#4711)</title>
+    <title>backle - {{story.title}}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -34,22 +34,22 @@
 <?php include('header.php') ?>
 
      <br>
-     <div class="container" ng-controller="DetailCtrl">
+     <div class="container">
        <div class="panel panel-success">
          <div class="panel-heading">
-           <h3 id="headline"><a href="#" editable-text="story.title">{{story.title || 'edit ..'}}</a></h3>
-           <a href="#" editable-text="story.text">{{story.text || 'edit ..'}}</a>
+           <h3 id="headline"><a href="#" editable-text="story.title" blur="submit" e-style="display: inline; width: 600px;">{{story.title || 'edit ..'}}</a></h3>
+           <a href="#" editable-text="story.text" blur="submit" e-style="width: 600px;">{{story.text || 'edit ..'}}</a>
           </div>
            <div class="panel-body">
             <div class="row">       
-              <div class="col-md-8" ckedit="story.detail"></div>
+            <div class="col-md-8" ckedit="story.detail" style="min-height:300px;"></div>
               <div class="col-md-4">
                 <br/>
                 <div class="row">
                   <!-- <div class="col-xs-4"><strong>Sprint</strong></div> <div class="col-xs-3">3</div> -->
                 </div>
                 <div class="row">
-                <div class="col-xs-4"><strong>StoryPoints</strong></div> <a href="#" class="col-xs-3" editable-text="story.points" e-style="width: 60px">{{story.points || 'edit ..'}}</a>
+                <div class="col-xs-4"><strong>StoryPoints</strong></div> <a href="#" class="col-xs-3" editable-text="story.points" blur="submit" e-style="width: 60px">{{story.points || 'edit ..'}}</a>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->

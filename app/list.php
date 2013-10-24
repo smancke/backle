@@ -17,15 +17,15 @@
     <div ng-controller="ListCtrl">
 
       <div class="{{alertType}}"  ng-bind-html="alertHtmlMessage"></div>
-
+     
       <div ng-show="backlogPresent">
         <div class="row">
           <div class="col-md-5 col-md-offset-1">
             <button ng-click="addItem()" type="button" class="btn  btn-default btn-lg">
-              <span class="glyphicon glyphicon-plus"></span>
+              <span class="glyphicon glyphicon-plus"></span> Story
             </button>
             <button ng-click="addSprint()" type="button" class="btn  btn-default btn-lg">
-              <span class="glyphicon glyphicon-plus"> Sprint</span>
+              <span class="glyphicon glyphicon-plus"></span> Sprint
             </button>
           </div>
           <div class="col-md-2">
@@ -40,7 +40,7 @@
                  class="backlog-list-item {{backlogItem.type}} {{backlogItem.status}}" 
                  ng-repeat="backlogItem in backlogItems" 
                  ng-click="focus($event)">
-
+              
               <a class="detail-link" href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a> 
               <span class="milestone-block">
                 <span id="item-title-{{backlogItem.id}}"
@@ -58,9 +58,9 @@
                       <div class="glyphicon glyphicon-trash"></div></a>
                   </div>
                 </div>
-              </span>
-
+              </span>              
             </div>
+            
           </div>
         </div>
       </div>
