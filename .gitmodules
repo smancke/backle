@@ -1,3 +1,6 @@
 [submodule "app/lib/ckeditor"]
 	path = app/lib/ckeditor
 	url = git://github.com/ckeditor/ckeditor-releases.git
+[submodule "app/SimpleOAuthLogin"]
+	path = app/SimpleOAuthLogin
+	url = https://github.com/smancke/SimpleOAuthLogin.git
