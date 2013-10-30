@@ -19,7 +19,14 @@
       <div class="navbar-right">
         <ul class="nav navbar-nav">
           <li><a class="dropdown-toggle" data-toggle="dropdown" href="<?=cfg_basepath()?>/">backlogs</a></li>
-          <li><a class="dropdown-toggle" data-toggle="dropdown" href="<?=cfg_basepath()?>/app/create.php">create backlog</a></li>
+          <li><a class="dropdown-toggle" data-toggle="dropdown" href="<?=cfg_basepath()?>/app/c/create.php">create backlog</a></li>
+<?php 
+     //if ($app->user) { 
+     //     echo '       <li><a href="'. cfg_basepath(). '/c/logout">'.$app->username.'</a></li>';
+     //} else {
+     //     echo '       <li><a href="'. cfg_basepath(). '/c/login">Sign in</a></li>';
+     //}
+?>
         </ul>
      </div>
     </div>

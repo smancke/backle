@@ -15,5 +15,6 @@
         echo "        global_backlogname = '" . $request['backlogname'] ."';\n";
         echo "        global_storyid = '" . $request['storyid'] ."';\n";
         echo "        global_basepath = '". cfg_basepath() ."';\n";
+//        echo "        global_user = '". ($app->user != null && property_exists($app->user, 'user')) ? $app->user->username : '' ."';\n";
      ?>
     </script>

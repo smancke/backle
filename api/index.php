@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set("Europe/Berlin");
 require '../lib/Slim/Slim.php';
 require '../config.php';
 require 'helper.php';
@@ -8,8 +9,8 @@ require 'helper.php';
 
 $app = new \Slim\Slim();
 $app->add(new \SlimDatabaseMW($cfg));
+$app->add(new \AuthMW($cfg));
 $app->response->headers->set('Content-Type', 'application/json');
-
 
 // list backlogs
 $app->get('/backlog', function() use($app) {
@@ -85,6 +86,7 @@ $app->put('/backlog/:backlogName/:itemid/moveItemBehind', function ($backlogName
         } else {
             $app->backlog->moveItemBehind($backlogName, $itemid, $bodyData->previousItem);
         }
+        echo json_encode(getItem($app, $backlogName, $itemid));
     });
 
 $app->get('/backlog/:backlogName/:itemid', wrap(function($backlogName,$itemid) use($app) {

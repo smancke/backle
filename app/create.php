@@ -1,8 +1,4 @@
-<?php
-
-require_once '../config.php';
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-app="backle">
   <head>
     <title>Create Backlog</title>

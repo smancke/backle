@@ -50,11 +50,11 @@ describe('Story api: ', function() {
                  {
                  }
             ).done(function(data, textStatus, jqXHR) {
-                expect(data.title).toEqual('');
-                expect(data.text).toEqual('');
+                expect(data.title).toEqual(null);
+                expect(data.text).toEqual(null);
 
-                expect(data.detail).not.toEqual('');
-                expect(data.points).toEqual('0'); //TODO: This shoud be an integer
+                expect(data.detail).not.toEqual(null);
+                expect(data.points).toEqual(null); //TODO: This shoud be an integer
                 expect(data.status).toEqual('open');                
                 expect(data.backlogorder).toBeDefined();
                 expect(data.created).toBeDefined(); //TODO: Better test of date types
@@ -176,11 +176,73 @@ describe('Story api: ', function() {
                             }).fail(function(jqXHR, textStatus, errorThrown) {
                                 self.fail("failed with http status "+ jqXHR.status);
                             });
-                    });
-                
+                    });                
             }
         });
+
+        function createABunchOfStories(count) {
+            for(var i=0; i<count; i++) {
+                POST('/api/backlog/'+ backlogName, {});
+            }
+        }
+
+        it('should allow moving a story from position 3 to begin', function() {
+            var storyUri;
+            createABunchOfStories(3);
+            GET('/api/backlog/'+ backlogName)            
+                .done(function(initialList, textStatus, jqXHR) {
+                    movingId = initialList[2].id;
+
+                    PUT(createProxyURL(initialList[2].self +'/moveItemBehind'),
+                         {previousItem: 'begin'}).done(function() {
+                             
+                             GET('/api/backlog/'+ backlogName)            
+                                 .done(function(newList, textStatus, jqXHR) {
+                                     expect(movingId).toEqual(newList[0].id);                                    
+                                 }).fail(function(jqXHR, textStatus, errorThrown) {
+                                     self.fail("failed with http status "+ jqXHR.status);
+                                 });
+                         }).fail(function(jqXHR, textStatus, errorThrown) {
+                             self.fail("failed with http status "+ jqXHR.status);
+                         });                                                                          
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                             self.fail("failed with http status "+ jqXHR.status);
+                });            
+        });
+
+
+
+        it('should allow moving a story from position 5 to position 3', function() {
+            var storyUri;
+            createABunchOfStories(6);
+            GET('/api/backlog/'+ backlogName)            
+                .done(function(initialList, textStatus, jqXHR) {
+                    movingId = initialList[4].id;
+                    targetId = initialList[1].id;
+
+                    PUT(createProxyURL(initialList[4].self +'/moveItemBehind'),
+                         {previousItem: targetId}).done(function() {
+                             
+                             GET('/api/backlog/'+ backlogName)            
+                                 .done(function(newList, textStatus, jqXHR) {
+                                     expect(movingId).toEqual(newList[2].id);
+                                     expect(initialList[0].id).toEqual(newList[0].id);
+                                     expect(initialList[1].id).toEqual(newList[1].id);
+                                     expect(initialList[2].id).toEqual(newList[3].id);
+                                     expect(initialList[3].id).toEqual(newList[4].id);
+                                     expect(initialList[4].id).toEqual(newList[2].id);
+                                     expect(initialList[5].id).toEqual(newList[5].id);
+
+                                 }).fail(function(jqXHR, textStatus, errorThrown) {
+                                     self.fail("failed with http status "+ jqXHR.status);
+                                 });
+                         }).fail(function(jqXHR, textStatus, errorThrown) {
+                             self.fail("failed with http status "+ jqXHR.status);
+                         });                                                                          
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                             self.fail("failed with http status "+ jqXHR.status);
+                });            
+        });
+
     });
 });
-
-
