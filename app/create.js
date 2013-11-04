@@ -7,15 +7,20 @@ backle.controller('CreateCtrl', ['$scope', '$http', '$sce', function($scope, $ht
     $scope.alertHtmlMessage = undefined;;
     $scope.alertType = undefined;
 
+    $scope.projectname = global_projectname;
     $scope.backlogname = global_backlogname;
+    $scope.backlogtitle = global_backlogname;
+    $scope.is_public_viewable = true;
 
     $scope.create = function() {
         $scope.alertHtmlMessage = '';
         $scope.alertType = '';
 
         var data = {
+            projectname: $scope.projectname,
             backlogname: $scope.backlogname,
-            title: $scope.backlogname
+            backlogtitle: $scope.backlogname,
+            is_public_viewable: $scope.is_public_viewable
         };
 
         $http.post(global_basepath +'/api/backlog', data)

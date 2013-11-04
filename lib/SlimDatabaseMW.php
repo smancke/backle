@@ -1,7 +1,5 @@
 <?php
 
-require 'Backlog.php';
-require 'dbFacile/dbFacile_mysql.php';
 
 class SlimDatabaseMW extends \Slim\Middleware
 {
@@ -14,19 +12,27 @@ class SlimDatabaseMW extends \Slim\Middleware
     
     public function call()
     {
+        global $_COOKIE;
+
         $app = $this->app;
+        $app->cfg = $this->cfg;
 
         $db = new dbFacile_mysql();
         $db->open($this->cfg['dbname'], $this->cfg['dbuser'], $this->cfg['dbpassword'], $this->cfg['dbhost']);
         if ($this->cfg['dblogfile'])
             $db->setLogile($this->cfg['dblogfile']);
               
-        $backlog = new Backlog($db);
-        //$backlog->setAndCreateUserIfNotExists($app->user->username, $app->user->origin);
-        $backlog->setAndCreateUserIfNotExists('testuser', 'nowhere');
+        
+        $app->backlog = new Backlog($db);
 
-        $app->cfg = $this->cfg;
-        $app->backlog = $backlog;
+        $app->userMgr = new UserManager($db);
+        if (isset($_COOKIE['s'])) {
+            if ($app->userMgr->pickUpSession($_COOKIE['s'])) {
+                $app->userInfo = $app->userMgr->getUserInfo();
+                $app->backlog->setUserId($app->userInfo['id']);
+            }
+        }
+        //$app->backlog->setUserId(1);
 
         // Run inner middleware and application
         $this->next->call();

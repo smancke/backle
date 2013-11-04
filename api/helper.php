@@ -33,6 +33,11 @@ function userError($message) {
     $app->halt(400, json_encode(['error'=> true, 'message' => $message], JSON_UNESCAPED_SLASHES));
 }
 
+function authError($message) {
+    global $app;
+    $app->halt(401, json_encode(['error'=> true, 'message' => $message], JSON_UNESCAPED_SLASHES));
+}
+
 function conflictError($message) {
     global $app;
     $app->halt(409, json_encode(['error'=> true, 'message' => $message], JSON_UNESCAPED_SLASHES));

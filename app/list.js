@@ -67,6 +67,7 @@ backle.directive('contenteditable', function() {
 
 backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($scope, Backlog, $http, $sce) {
 
+    $scope.permissions = global_backlog_permissions;
     $scope.backlogname = global_backlogname;
 
     $scope.backlogPresent = false;
@@ -88,7 +89,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             $scope.backlogPresent = true;
             $scope.recalculateMilestonePoints();
         },function() {
-            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\""+ global_basepath +"/app/create.php?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
+            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\""+ global_basepath +"/c/create?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
             $scope.alertType = 'alert alert-danger';
             $scope.backlogPresent = false;
         });
@@ -119,6 +120,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
                 }
             } else {
                 if ($scope.backlogItems[i].points != sum) {
+                    var sprintItem = $scope.backlogItems[i];
                     $scope.backlogItems[i].points = sum;
                 }
                 sum = 0;
@@ -250,20 +252,22 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         return id;
     }
 
-    $( "#item-list" ).sortable({ 
-        helper: 'clone',
-        axis: 'y',  
-        cursor: "move",
-        stop: function(event, ui) {
-            var movingId = $scope.getStoryIdByElement(ui.item);
-            var previousId = 'begin';
-            if (ui.item.prev().attr('id')) {
-                previousId = $scope.getStoryIdByElement(ui.item.prev());
-            } 
-            $scope.$apply(function() {
-                $scope.moveStoryBefore(movingId, previousId);
-            });
-        }
-    });
+    if ($scope.permissions.write) {
+        $( "#item-list" ).sortable({ 
+            helper: 'clone',
+            axis: 'y',  
+            cursor: "move",
+            stop: function(event, ui) {
+                var movingId = $scope.getStoryIdByElement(ui.item);
+                var previousId = 'begin';
+                if (ui.item.prev().attr('id')) {
+                    previousId = $scope.getStoryIdByElement(ui.item.prev());
+                } 
+                $scope.$apply(function() {
+                    $scope.moveStoryBefore(movingId, previousId);
+                });
+            }
+        });
+    }
 
 }]);

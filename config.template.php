@@ -7,6 +7,9 @@ $cfg['dbuser'] = 'backle';
 $cfg['dbpassword'] = 'backle';
 $cfg['dbname'] = 'backle';
 
+$cfg['demo_login_enabled'] = true;
+$cfg['demo_login_password'] = 'secret';
+
 $cfg['cookie_secret'] = 'secret_key_for_cookies';
 
 $cfg['google']['client_id'] = 'your-client-id.apps.googleusercontent.com';

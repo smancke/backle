@@ -19,7 +19,7 @@
       <div class="{{alertType}}"  ng-bind-html="alertHtmlMessage"></div>
      
       <div ng-show="backlogPresent">
-        <div class="row">
+        <div class="row" ng-show="permissions.write">
           <div class="col-md-5 col-md-offset-1">
             <button ng-click="addItem()" type="button" class="btn  btn-default btn-lg">
               <span class="glyphicon glyphicon-plus"></span> Story
@@ -41,17 +41,17 @@
                  ng-repeat="backlogItem in backlogItems" 
                  ng-click="focus($event)">
               
-              <a class="detail-link" href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a> 
+              <div class="detail-link"><a href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a></div>
               <span class="milestone-block">
                 <span id="item-title-{{backlogItem.id}}"
                       class="backlog-item-title"
-                      contentEditable="true"
+                      contentEditable="{{permissions.write}}"
                       ng-model="backlogItem.title" 
                       ng-keypress="itemTitleKeyPressed($event)"></span>
                 
                 <div class="backlog-item-right">
-                  <span class="badge" style="min-width:32px;" ng-click="focus($event)"><span class="badge-text" contenteditable="true" ng-model="backlogItem.points"></span></span>
-                  <div class="backlog-item-buttons">
+                  <span class="badge" style="min-width:32px; margin-right: 3px;" ng-click="focus($event)"><span class="badge-text" contenteditable="{{permissions.write}}" ng-model="backlogItem.points"></span></span>
+                  <div class="backlog-item-buttons" ng-show="permissions.write">
                     <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">
                       <div class="glyphicon glyphicon-ok"></div></a>
                     <a class="backlog-btn" href="#" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">

@@ -66,6 +66,10 @@ html * {
     padding-bottom: 2px;
 }
 
+.detail-link {
+    min-width: 40px;
+    display: inline-block;
+}
 
 .milestone > .detail-link {
     display: none;

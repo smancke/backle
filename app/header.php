@@ -17,17 +17,28 @@
       </div>
 -->
       <div class="navbar-right">
+<?php if ($app->userInfo): ?>
         <ul class="nav navbar-nav">
-          <li><a class="dropdown-toggle" data-toggle="dropdown" href="<?=cfg_basepath()?>/">backlogs</a></li>
-          <li><a class="dropdown-toggle" data-toggle="dropdown" href="<?=cfg_basepath()?>/app/c/create.php">create backlog</a></li>
-<?php 
-     //if ($app->user) { 
-     //     echo '       <li><a href="'. cfg_basepath(). '/c/logout">'.$app->username.'</a></li>';
-     //} else {
-     //     echo '       <li><a href="'. cfg_basepath(). '/c/login">Sign in</a></li>';
-     //}
-?>
-        </ul>
+          <li><a href="<?=cfg_basepath()?>/">backlogs</a></li>
+          <li><a href="<?=cfg_basepath()?>/c/create">create backlog</a></li>
+        <li class="dropdown">
+         <a style="padding: 0px;" class="dropdown-toggle" data-toggle="dropdown" href="#">
+<?php if ($app->userInfo['image_url']): ?>
+  <img style="padding:0px; margin:0px; height:40px; width:40px;" src="<?=$app->userInfo['image_url']?>" title="<?=$app->userInfo['displayname']?>">
+<?php else: ?>
+  <span style="padding:10px;" class="glyphicon glyphicon-user" title="<?=$app->userInfo['displayname']?>"></span>
+<?php endif ?>
+
+
+         <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="<?=cfg_basepath()?>/c/logout"><span class="glyphicon glyphicon-ban-circle"></span> Logout</a></li>
+            </ul>
+        </li>
+       </ul>
+<?php else: ?>
+        <a href="<?=cfg_basepath()?>/c/loginRedirect"><img style="margin-top: 4px;" src="<?=cfg_basepath()?>/app/images/google-sign-in.png"/></a>
+<?php endif ?>
      </div>
     </div>
 </div>

@@ -12,13 +12,27 @@
 <?php include('header.php') ?>
 
     <br>
-    <div class="thumbnail center well text-center">
-      <h2>Create Backlog</h2>
+    <div class="well" style="width: 400px; margin: auto">
+      <h3>Create Backlog</h3>
       <div class="{{alertType}}" ng-bind-html="alertHtmlMessage"></div>
-      <form action="" method="post">
-        <br />
-        <input id="name" type="text" placeholder="your backlogname" class="form-control" style="width: 300px; margin:auto;" ng-model="backlogname">
-        <br />
+      <form role="form">
+
+        <div class="form-group" ng-show="projectname">
+          <label for="name">Project: {{projectname}}</label>          
+        </div>
+        <div class="form-group">
+          <label for="name">Name</label>          
+          <input id="name" type="text" placeholder="e.g. my_backlog" class="form-control" style="width: 300px;" ng-model="backlogname">
+        </div>
+        <div class="form-group">
+          <label for="title">Title</label>          
+          <input id="title" type="text" placeholder="e.g. My cool Backlog" class="form-control" style="width: 300px;" ng-model="backlogtitle">
+        </div>
+        <div class="checkbox">
+          <label>
+           <input type="checkbox" name="is_public_viewable" value="1" ng-model="is_public_viewable"> Public viewable
+          </label>
+        </div>
         <br />
         <input type="submit" value="Create Now!" class="btn btn-large" ng-click="create()"/>
       </form>

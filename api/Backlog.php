@@ -7,46 +7,27 @@ class Backlog {
 
     protected $db;
 
-    protected $user;
     protected $userId;
    
     public function __construct($db) {
         $this->db = $db;
     }                                           
 
-    /**
-     * set the user/owner for all queries
-     * If it does not exist, we create it within the database.
-     */
-    public function setAndCreateUserIfNotExists($username, $origin) {
-
-        $this->username = $username;
-        
-        $user = $this->db->fetchRow("SELECT * FROM user WHERE username = ? AND origin = ?", [$username, $origin]);
-        if ($user) {
-            
-            $this->userId = $user['id'];
-
-        } else {
-            $insData = ['username' => $username,
-                        'origin' => $origin, 
-                        'created' => date('Y-m-d H:i:s',time())];
-            $result = $this->db->insert($insData, 'user');
-            $this->userId = mysql_insert_id($this->db);
-        }
-
-    }
-
-    public function setUser($username) {
-        $this->username = $username;
-        $this->userId = 42;
+    public function setUserId($userId) {
+        $this->userId = $userId;
     }
     
-    public function createBacklog($backlogName) {
+    public function createBacklog($backlogName, $backlogtitle, $isPublicViewable, $projectId) {
         $insData = ['backlogname' => $backlogName,
+                    'backlogtitle' => $backlogtitle,
+                    'is_public_viewable' => $isPublicViewable,
                     'owner_id' => $this->userId, 
                     'created' => date('Y-m-d H:i:s',time())];
-        
+
+        if ($projectId != null) {
+            $insData['project_id'] = $projectId;
+        }
+            
         return $this->db->insert($insData, 'backlog');
     }
 
@@ -55,6 +36,13 @@ class Backlog {
      */
     public function getBacklogs() {
         return $this->db->fetchRows('SELECT backlogname FROM backlog');
+    }
+
+    /**
+     * Returns the Backlog
+     */
+    public function getBacklog($backlogName) {
+        return $this->db->fetchRow('SELECT * FROM backlog where backlogname = ?', [$backlogName]);
     }
 
     /**
@@ -152,16 +140,16 @@ EOT;
     }
 
     /**
-     * Check, if a given backlog is readeable for a user.
-     * Since wo don't have private backlogs yet, 
-     * this only checks, if the backlog exists.
+     * returns an array with rights of the current user for the supplied backlog
      */
-    public function isReadeableForUser($backlogName) {
-        if ($this->getBacklogIdByName($backlogName)) {
-            return true;
-        } else {
-            return false;
-        }
+    public function getRights($backlogName) {
+        $backlog = $this->getBacklog($backlogName);
+        $isOwner = $backlog['owner_id'] == $this->userId;
+        $rights = [
+                   'read' => $isOwner || $backlog['is_public_viewable'],
+                   'write' => $isOwner
+                   ];
+        return $rights;
     }
 
     /**
@@ -184,7 +172,7 @@ EOT;
      * Delete one Item within the backlog
      */
     public function deleteItem($backlogName, $id) {
-        $this->db->delete('item', ['backlog_id' => $this->getBacklogIdByName($backlogName), id => $id]);
+        $this->db->delete('item', ['backlog_id' => $this->getBacklogIdByName($backlogName), 'id' => $id]);
     }
 }
 

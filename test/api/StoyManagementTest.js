@@ -5,15 +5,30 @@ describe('Story api: ', function() {
     var BacklogManagement;
     var self;
 
-
     beforeEach(function() {
         self = this;
         backlogName = 'test-backlog-'+ randomString();
+
+        // login
+        $.ajax({
+            url: '/c/demoLogin',
+            type: "POST",
+            data: "demo_login_password=secret",
+            async: false,
+        }).always(function(data, textStatus, jqXHR) { 
+            if (jqXHR.status != 200 && jqXHR.status != 301 && jqXHR.status != 302) {
+                self.fail("failed to login with demo account "+ jqXHR.status);
+            }
+        });      
         
         POST_BACKLOGS(
-            {backlogname: backlogName}
+            {backlogname: backlogName,
+             backlogtitle: 'Title for '+backlogName,
+             is_public_viewable: true}
         ).fail(function(jqXHR, textStatus, errorThrown) {
-            self.fail("failed with http status "+ jqXHR.status);
+            if (jqXHR.status != 201) {
+                self.fail("failed with http status "+ jqXHR.status);
+            }
         });
     });
     

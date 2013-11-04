@@ -9,6 +9,8 @@ module.exports = function (config) {
 
       proxies: {
           '/api/': 'http://127.0.0.1/backle/api/',
+          '/c/': 'http://127.0.0.1/backle/c/',
+          '/backle/': 'http://127.0.0.1/backle/',
       },
       
     frameworks: ['jasmine'],
