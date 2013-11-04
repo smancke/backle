@@ -28,15 +28,14 @@
 <?php else: ?>
   <span style="padding:10px;" class="glyphicon glyphicon-user" title="<?=$app->userInfo['displayname']?>"></span>
 <?php endif ?>
-
-
          <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="<?=cfg_basepath()?>/c/logout"><span class="glyphicon glyphicon-ban-circle"></span> Logout</a></li>
             </ul>
         </li>
+<?php endif ?>
        </ul>
-<?php else: ?>
+<?php if (!$app->userInfo): ?>
         <a href="<?=cfg_basepath()?>/c/loginRedirect"><img style="margin-top: 4px;" src="<?=cfg_basepath()?>/app/images/google-sign-in.png"/></a>
 <?php endif ?>
      </div>
