@@ -39,7 +39,7 @@ $app->get('/c/login', function() use($app) {
             && $loginHandler->updateMyCircles($app->userMgr)
             ) {
             
-            Header('Location: '.$loginHandler->getNextAction(cfg_basepath().''));
+            Header('Location: '.$loginHandler->getNextAction(cfg_basepath().'/'));
             die();
         } else {
             $errorMessage = $loginHandler->getError();
