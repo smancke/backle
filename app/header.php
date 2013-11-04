@@ -17,9 +17,9 @@
       </div>
 -->
       <div class="navbar-right">
-<?php if ($app->userInfo): ?>
         <ul class="nav navbar-nav">
           <li><a href="<?=cfg_basepath()?>/">backlogs</a></li>
+<?php if ($app->userInfo): ?>
           <li><a href="<?=cfg_basepath()?>/c/create">create backlog</a></li>
         <li class="dropdown">
          <a style="padding: 0px;" class="dropdown-toggle" data-toggle="dropdown" href="#">

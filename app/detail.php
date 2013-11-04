@@ -8,6 +8,7 @@
     <script src="<?=cfg_basepath()?>/app/lib/xeditable.min.js"></script>    
     <link rel="stylesheet" href="<?=cfg_basepath()?>/app/lib/xeditable.css" type="text/css"/>
 
+    <script src="<?=cfg_basepath()?>/app/lib/ckeditor/ckeditor.js"></script>    
     <script src="<?=cfg_basepath()?>/app/detail.js"></script>    
     <script src="<?=cfg_basepath()?>/app/common.js"></script>
   </head>
