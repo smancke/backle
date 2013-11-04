@@ -261,7 +261,7 @@ abstract class dbFacile {
 	}
 
 	public function quoteEscapeString($value) {
-                if ($value == null)
+                if ($value === null)
                     return 'Null';
 
 		return "'" . $this->escapeString($value) . "'";

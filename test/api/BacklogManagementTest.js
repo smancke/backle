@@ -2,38 +2,14 @@
 describe('Backlog api: ', function() {
     
     var backlogName;
-    var backlogUri;
     var self;
 
     beforeEach(function() {
         self = this;
-        backlogName = 'test-backlog-'+ Math.random().toString(36).substring(2,7);
-
-        // login
-        $.ajax({
-            url: '/c/demoLogin',
-            type: "POST",
-            data: "demo_login_password=secret",
-            async: false,
-        }).always(function(data, textStatus, jqXHR) { 
-            if (jqXHR.status != 200 && jqXHR.status != 301 && jqXHR.status != 302) {
-                self.fail("failed to login with demo account "+ jqXHR.status);
-            }
-        });      
-
-        // create backlog
-        POST_BACKLOGS(
-            {backlogname: backlogName,
-             backlogtitle: 'Title for '+backlogName,
-             is_public_viewable: true}
-        ).done(function(data, textStatus, jqXHR) {
-            expect(data.backlogname).toEqual(backlogName);
-            backlogUri = jqXHR.getResponseHeader('Location');            
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status != 201) {
-                self.fail("failed with http status "+ jqXHR.status);
-            }
-        });
+        backlogName = 'test-backlog-'+ randomString();
+        
+        login();
+        createBacklog(backlogName);
     });
     
     describe('A backlog ressource', function(){

@@ -9,27 +9,8 @@ describe('Story api: ', function() {
         self = this;
         backlogName = 'test-backlog-'+ randomString();
 
-        // login
-        $.ajax({
-            url: '/c/demoLogin',
-            type: "POST",
-            data: "demo_login_password=secret",
-            async: false,
-        }).always(function(data, textStatus, jqXHR) { 
-            if (jqXHR.status != 200 && jqXHR.status != 301 && jqXHR.status != 302) {
-                self.fail("failed to login with demo account "+ jqXHR.status);
-            }
-        });      
-        
-        POST_BACKLOGS(
-            {backlogname: backlogName,
-             backlogtitle: 'Title for '+backlogName,
-             is_public_viewable: true}
-        ).fail(function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status != 201) {
-                self.fail("failed with http status "+ jqXHR.status);
-            }
-        });
+        login();
+        createBacklog(backlogName);
     });
     
     describe('A backlog ressource', function(){
@@ -163,6 +144,33 @@ describe('Story api: ', function() {
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 self.fail("failed with http status "+ jqXHR.status);
             });
+        });
+
+        it('should allow story point update of an milestone item to "0"', function() {
+            var storyUri;
+
+            POST('/api/backlog/'+ backlogName,
+                 {
+                     title: 'Sprint #2',                     
+                     type: 'milestone'
+                 }
+            ).done(function(data, textStatus, jqXHR) {
+                expect(data.points).toBeNull();
+                storyUri = jqXHR.getResponseHeader('Location');
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });
+
+            PUT(createProxyURL(storyUri),
+                 {
+                     points: 0,
+                 }
+            ).done(function(data, textStatus, jqXHR) {
+                expect(data.points).toEqual('0');
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });
+
         });
 
         it('should allow fetching all the stories of the backlog', function() {

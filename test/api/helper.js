@@ -43,3 +43,30 @@ function GET_DATA(url) {
     return result;
 }
 
+function login() {
+    // login
+    $.ajax({
+        url: '/c/demoLogin',
+        type: "POST",
+        data: "demo_login_password=secret",
+        async: false,
+    }).always(function(data, textStatus, jqXHR) { 
+        if (jqXHR.status != 200 && jqXHR.status != 301 && jqXHR.status != 302) {
+            self.fail("failed to login with demo account "+ jqXHR.status);
+        }
+    });      
+    
+}
+
+function createBacklog(backlogName) {
+    // create backlog
+    POST_BACKLOGS(
+        {backlogname: backlogName,
+         backlogtitle: 'Title for '+backlogName,
+         is_public_viewable: true}
+    ).fail(function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status != 201) {
+            self.fail("failed with http status "+ jqXHR.status);
+        }
+    });    
+}
