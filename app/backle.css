@@ -1,3 +1,4 @@
+
 html * {
     font-family: verdana,arial,sans-serif;
 }
@@ -19,6 +20,7 @@ html * {
 }
 
 .backlog-item-title {
+    border: 1px solid #ffffff;
     cursor: text;
     margin-left:0px;
     padding-left: 2px;

@@ -19,37 +19,34 @@ jQuery.fn.selectText = function() {
 }
 
 backle.directive('contenteditable', function() {
+    // fix for correct blur on on webkit based browser
+    var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
+
     return {
+
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
             // view -> model
             elm.on('blur', function() {
                 scope.$apply(function() {
                     var html = elm.html();
-                    html = html.replace(/&nbsp;/g, ' ');
-                    html = $.trim(html);
                     ctrl.$setViewValue(html);
-                    if (ctrl.$viewValue == '' || ctrl.$viewValue == ' ') {
-                        elm.html('&nbsp;');
-                    } else {
-                        elm.html(html);
-                    }
+                    elm.html(html);
                 });
             });
-
+            
             // model -> view
             ctrl.$render = function() {
-                if (ctrl.$viewValue == '' || ctrl.$viewValue == ' ') {
-                    elm.html('&nbsp;'); // workarround to prevent collapsing the editable field
-                } else {
-                    elm.html(ctrl.$viewValue);
-                }
+                elm.html(ctrl.$viewValue);
             };
             
             elm.on('keydown', function(event) {
                 if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
                     event.target.blur();
-                    return false;
+
+                    // fix for correct blur on on webkit based browser
+                    editableFix[0].setSelectionRange(0, 0);
+                    editableFix.blur();
                 }
                 else if (event.keyCode == 27) { // Esc
                     elm.html(ctrl.$viewValue);
@@ -239,7 +236,10 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         }
         for (var i = 0; i < newValue.length; i++) {
             var oldElement = $scope.getArrayElementById(oldValue, newValue[i].id);
-            if (!angular.equals(newValue[i], oldElement)) {
+            if (!angular.equals(newValue[i].title, oldElement.title)
+                || !angular.equals(newValue[i].text, oldElement.text)
+                || !angular.equals(newValue[i].done, oldElement.done)
+                || !angular.equals(newValue[i].points, oldElement.points)) {
                 newValue[i].$update();
             }
         }

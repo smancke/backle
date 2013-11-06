@@ -93,6 +93,10 @@ EOT;
             }
         }
 
+        if ($udapteData['points'] === '') {
+            $udapteData['points'] = Null;
+        }
+
         if (property_exists($itemData, 'status')) {
             if ($itemData->status == 'done') {
                 $udapteData['done'] = date('Y-m-d H:i:s',time());

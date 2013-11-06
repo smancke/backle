@@ -8,7 +8,7 @@
     <script src="<?=cfg_basepath()?>/app/list.js"></script>
     <script src="<?=cfg_basepath()?>/app/common.js"></script>
   </head>
-  <body>
+  <body style="overflow-y:auto">
     
     <?php include('header.php') ?>
 
@@ -29,7 +29,7 @@
             </button>
           </div>
           <div class="col-md-2">
-            <span class="badge pull-right" style="min-width:32px; margin-right: 73px">{{totalStoryPoints}}</span>
+            <span class="badge pull-right" style="min-height:18px; min-width:36px; margin-right: 78px">{{totalStoryPoints}}</span>
           </div>  
         </div>
         <br>
@@ -43,14 +43,14 @@
               
               <div class="detail-link"><a href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a></div>
               <span class="milestone-block">
-                <span id="item-title-{{backlogItem.id}}"
+                <div style="display: inline-block; min-height: 18px; min-width: 3px; margin: 0px; padding: 0px;" id="item-title-{{backlogItem.id}}"
                       class="backlog-item-title"
                       contentEditable="{{permissions.write}}"
                       ng-model="backlogItem.title" 
-                      ng-keypress="itemTitleKeyPressed($event)"></span>
+                      ng-keypress="itemTitleKeyPressed($event)"></div>
                 
                 <div class="backlog-item-right">
-                  <span class="badge" style="min-width:32px; margin-right: 3px;" ng-click="focus($event)"><span class="badge-text" contenteditable="{{permissions.write}}" ng-model="backlogItem.points"></span></span>
+                  <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)"><span class="badge-text" style="padding: 1px;" contenteditable="{{permissions.write}}" ng-model="backlogItem.points"></span></span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
                     <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">
                       <div class="glyphicon glyphicon-ok"></div></a>
