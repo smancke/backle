@@ -49,7 +49,7 @@
                       ng-model="backlogItem.title" 
                       ng-keypress="itemTitleKeyPressed($event)"></div>
                 
-                <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
+                <a class="backlog-btn" href="#" style="cursor: default;" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
                   <div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
 
                 
