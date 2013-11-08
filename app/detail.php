@@ -5,9 +5,6 @@
 
     <?php include('headSection.php') ?>
 
-    <script src="<?=cfg_basepath()?>/app/lib/xeditable.min.js"></script>    
-    <link rel="stylesheet" href="<?=cfg_basepath()?>/app/lib/xeditable.css" type="text/css"/>
-
     <script src="<?=cfg_basepath()?>/app/lib/ckeditor/ckeditor.js"></script>    
     <script src="<?=cfg_basepath()?>/app/detail.js"></script>    
     <script src="<?=cfg_basepath()?>/app/common.js"></script>
@@ -19,8 +16,13 @@
      <div class="container">
        <div class="panel panel-success">
          <div class="panel-heading">
-           <h3 id="headline"><a href="#" editable-text="story.title" blur="submit" e-style="display: inline; width: 600px;">{{story.title || 'edit ..'}}</a></h3>
-           <a href="#" editable-text="story.text" blur="submit" e-style="width: 600px;">{{story.text || 'edit ..'}}</a>
+           <h3 id="headline"><div style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
+                                  contentEditable="{{permissions.write}}"
+                                  ng-model="story.title"></div></h3>
+
+           <div style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
+                contentEditable="{{permissions.write}}"
+                ng-model="story.text"></div>
           </div>
            <div class="panel-body">
             <div class="row">       
@@ -31,7 +33,10 @@
                   <!-- <div class="col-xs-4"><strong>Sprint</strong></div> <div class="col-xs-3">3</div> -->
                 </div>
                 <div class="row">
-                <div class="col-xs-4"><strong>StoryPoints</strong></div> <a href="#" class="col-xs-3" editable-text="story.points" blur="submit" e-style="width: 60px">{{story.points || 'edit ..'}}</a>
+                  <div class="col-xs-4"><strong>StoryPoints</strong></div>                   
+                  <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
+                       contentEditable="{{permissions.write}}"
+                       ng-model="story.points"></div>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->

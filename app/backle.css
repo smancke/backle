@@ -7,6 +7,11 @@ html * {
     text-decoration:line-through; 
 }
 
+
+.placeholder {
+    color: #c00;
+}
+
 .backlog-list-item {
     display: block;
     background-color: #ffffff;

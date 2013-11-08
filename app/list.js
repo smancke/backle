@@ -18,50 +18,6 @@ jQuery.fn.selectText = function() {
   });
 }
 
-backle.directive('contenteditable', function() {
-    // fix for correct blur on on webkit based browser
-    var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
-
-    return {
-
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl) {
-            // view -> model
-            elm.on('blur', function() {
-                scope.$apply(function() {
-                    var html = elm.html();
-                    ctrl.$setViewValue(html);
-                    elm.html(html);
-                });
-            });
-            
-            // model -> view
-            ctrl.$render = function() {
-                elm.html(ctrl.$viewValue);
-            };
-            
-            elm.on('keydown', function(event) {
-                if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
-                    event.target.blur();
-
-                    // fix for correct blur on on webkit based browser
-                    editableFix[0].setSelectionRange(0, 0);
-                    editableFix.blur();
-                }
-                else if (event.keyCode == 27) { // Esc
-                    elm.html(ctrl.$viewValue);
-                    event.target.blur();
-                }
-            });
-            
-            elm.on('click', function(event) {
-                this.focus();
-            });
-        }
-    }
-});
-
-
 backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($scope, Backlog, $http, $sce) {
 
     $scope.permissions = global_backlog_permissions;

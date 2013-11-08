@@ -50,7 +50,13 @@
                       ng-keypress="itemTitleKeyPressed($event)"></div>
                 
                 <div class="backlog-item-right">
-                  <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)"><span class="badge-text" style="padding: 1px;" contenteditable="{{permissions.write}}" ng-model="backlogItem.points"></span></span>
+                  <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)">
+                    <span class="badge-text" 
+                          style="padding: 1px;" 
+                          contenteditable="{{permissions.write}}" 
+                          ng-model="backlogItem.points"
+                          placeholder="  "></span>
+                  </span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
                     <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">
                       <div class="glyphicon glyphicon-ok"></div></a>

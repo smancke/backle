@@ -1,8 +1,4 @@
-var backle = angular.module('backle', ['ngResource', 'xeditable']);
-
-backle.run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
+var backle = angular.module('backle', ['ngResource']);
 
 backle.directive('ckedit', function ($parse) {
     CKEDITOR.disableAutoInline = true;
