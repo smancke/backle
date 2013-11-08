@@ -3,10 +3,15 @@ html * {
     font-family: verdana,arial,sans-serif;
 }
 
-.done {
-    text-decoration:line-through; 
+.greenOk {
+    color: green;
+    font-size: large;
 }
 
+.greyOk {
+    color: #ccc;
+    font-size: x-small;
+}
 
 .placeholder {
     color: #c00;

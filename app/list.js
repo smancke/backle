@@ -194,7 +194,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             var oldElement = $scope.getArrayElementById(oldValue, newValue[i].id);
             if (!angular.equals(newValue[i].title, oldElement.title)
                 || !angular.equals(newValue[i].text, oldElement.text)
-                || !angular.equals(newValue[i].done, oldElement.done)
+                || !angular.equals(newValue[i].status, oldElement.status)
                 || !angular.equals(newValue[i].points, oldElement.points)) {
                 newValue[i].$update();
             }

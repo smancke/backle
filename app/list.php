@@ -37,7 +37,7 @@
           <div class="col-md-7 col-md-offset-1" id="item-list">
 
             <div id="item-{{backlogItem.id}}" 
-                 class="backlog-list-item {{backlogItem.type}} {{backlogItem.status}}" 
+                 class="backlog-list-item {{backlogItem.type}}" 
                  ng-repeat="backlogItem in backlogItems" 
                  ng-click="focus($event)">
               
@@ -49,6 +49,10 @@
                       ng-model="backlogItem.title" 
                       ng-keypress="itemTitleKeyPressed($event)"></div>
                 
+                <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
+                  <div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
+
+                
                 <div class="backlog-item-right">
                   <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)">
                     <span class="badge-text" 
@@ -58,8 +62,6 @@
                           placeholder="  "></span>
                   </span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
-                    <a class="backlog-btn" href="#" ng-click="markAsDone(backlogItem)" title="done/open" tabindex="-1">
-                      <div class="glyphicon glyphicon-ok"></div></a>
                     <a class="backlog-btn" href="#" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">
                       <div class="glyphicon glyphicon-trash"></div></a>
                   </div>
