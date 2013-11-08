@@ -26,7 +26,7 @@
           </div>
            <div class="panel-body">
             <div class="row">       
-            <div class="col-md-8" ckedit="story.detail" style="min-height:300px;"></div>
+            <div class="col-md-8" ckedit="story.detail" contentEditable="{{permissions.write}}" style="min-height:300px;"></div>
               <div class="col-md-4">
                 <br/>
                 <div class="row">
