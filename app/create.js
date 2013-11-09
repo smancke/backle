@@ -19,7 +19,7 @@ backle.controller('CreateCtrl', ['$scope', '$http', '$sce', function($scope, $ht
         var data = {
             projectname: $scope.projectname,
             backlogname: $scope.backlogname,
-            backlogtitle: $scope.backlogname,
+            backlogtitle: $scope.backlogtitle,
             is_public_viewable: $scope.is_public_viewable
         };
 

@@ -10,13 +10,22 @@
     <script src="<?=cfg_basepath()?>/app/common.js"></script>
   </head>
   <body>
-<?php include('header.php') ?>
+    <?php include('header.php') ?>
 
-     <br>
+    <br>
+    <div class="row">
+      <div class="col-md-5 col-md-offset-1">
+        <a href="<?=cfg_basepath()?>/{{backlogname}}"
+           class="btn btn-default btn-lg">
+          <span class="glyphicon glyphicon-chevron-left"></span> {{backlogname}}
+        </a>
+      </div>
+    </div>
+    <br>
      <div class="container">
        <div class="panel panel-success">
          <div class="panel-heading">
-           <h3 id="headline"><div style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
+           <h3 id="headline"><div  style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
                                   contentEditable="{{permissions.write}}"
                                   ng-model="story.title"></div></h3>
 

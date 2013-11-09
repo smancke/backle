@@ -79,6 +79,10 @@ $app->get('/c/logout', function() use($app) {
     });
 
 $app->get('/c/create', function() use($app) {
+        if (!$app->userInfo) {
+            Header('Location: '.cfg_basepath().'/c/loginRedirect?nextAction='.cfg_basepath().'/c/create');
+            die();
+        }
         require 'app/create.php';
     });
 

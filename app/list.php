@@ -29,7 +29,13 @@
             </button>
           </div>
           <div class="col-md-2">
-            <span class="badge pull-right" style="min-height:18px; min-width:36px; margin-right: 78px">{{totalStoryPoints}}</span>
+            <div class="input-group pull-right">
+              <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
+              <div class="input-group-btn">
+                <button class="btn btn-default" ng-click="searchText = ''" ng-disabled="! searchText" type="submit"><i class="glyphicon glyphicon-remove"></i></button>
+              </div>
+            </div>
+            <!-- <span class="badge pull-right" style="min-height:18px; min-width:36px; margin-right: 40px">{{totalStoryPoints}}</span> -->
           </div>  
         </div>
         <br>
@@ -38,7 +44,7 @@
 
             <div id="item-{{backlogItem.id}}" 
                  class="backlog-list-item {{backlogItem.type}}" 
-                 ng-repeat="backlogItem in backlogItems" 
+                 ng-repeat="backlogItem in backlogItems | filter: searchText" 
                  ng-click="focus($event)">
               
               <div class="detail-link"><a href="<?=cfg_basepath()?>/{{backlogname}}/{{backlogItem.id}}">#{{backlogItem.id}}</a></div>
@@ -49,13 +55,13 @@
                       ng-model="backlogItem.title" 
                       ng-keypress="itemTitleKeyPressed($event)"></div>
                 
-                <a class="backlog-btn" href="#" style="cursor: default;" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
+                <a class="backlog-btn" href="#" style="cursor: default;" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
                   <div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
 
                 
                 <div class="backlog-item-right">
                   <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)">
-                    <span class="badge-text" 
+                    <span tabindex="-1" class="badge-text" 
                           style="padding: 1px;" 
                           contenteditable="{{permissions.write}}" 
                           ng-model="backlogItem.points"

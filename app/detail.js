@@ -94,6 +94,7 @@ backle.factory('Story', function($resource){
 
 backle.controller('DetailCtrl', ['$scope', '$http', '$sce', '$filter', function($scope, $http, $sce, $filter) {
     $scope.permissions = global_backlog_permissions;
+    $scope.backlogname = global_backlogname;
 
     $scope.storyUri = global_basepath +'/api/backlog/' + global_backlogname + '/' + global_storyid;
 

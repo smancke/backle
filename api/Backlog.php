@@ -35,7 +35,7 @@ class Backlog {
      * Returns all Backlogs
      */
     public function getBacklogs() {
-        return $this->db->fetchRows('SELECT backlogname FROM backlog');
+        return $this->db->fetchRows('SELECT * FROM backlog ORDER BY backlogtitle');
     }
 
     /**
@@ -160,7 +160,7 @@ EOT;
      * Returns all Stories within the backlog
      */
     public function getItems($backlogName) {
-        return $this->db->fetchRows('SELECT id, type, title, text, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = ? ORDER BY backlogorder', 
+        return $this->db->fetchRows('SELECT id, type, title, text, detail, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = ? ORDER BY backlogorder', 
                                           [$this->getBacklogIdByName($backlogName)]);
     }
 
