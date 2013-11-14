@@ -19,12 +19,12 @@
       <div class="{{alertType}}"  ng-bind-html="alertHtmlMessage"></div>
      
       <div ng-show="backlogPresent">
-        <div class="row" ng-show="permissions.write">
+        <div class="row">
           <div class="col-md-5 col-md-offset-1">
-            <button ng-click="addItem()" type="button" class="btn  btn-default btn-lg">
+            <button ng-show="permissions.write" ng-click="addItem()" type="button" class="btn  btn-default btn-lg">
               <span class="glyphicon glyphicon-plus"></span> Story
             </button>
-            <button ng-click="addSprint()" type="button" class="btn  btn-default btn-lg">
+            <button ng-show="permissions.write" ng-click="addSprint()" type="button" class="btn  btn-default btn-lg">
               <span class="glyphicon glyphicon-plus"></span> Sprint
             </button>
           </div>

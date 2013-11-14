@@ -17,32 +17,41 @@ class Backlog {
         $this->userId = $userId;
     }
     
-    public function createBacklog($backlogName, $backlogtitle, $isPublicViewable, $projectId) {
+    public function createBacklog($backlogName, $backlogtitle, $isPublicViewable, $projectId, $isProjectDefault=false) {
         $insData = ['backlogname' => $backlogName,
                     'backlogtitle' => $backlogtitle,
                     'is_public_viewable' => $isPublicViewable,
                     'owner_id' => $this->userId, 
+                    'project_id' => $projectId,
+                    'is_project_default' => $isProjectDefault,
                     'created' => date('Y-m-d H:i:s',time())];
 
-        if ($projectId != null) {
-            $insData['project_id'] = $projectId;
-        }
-            
         return $this->db->insert($insData, 'backlog');
     }
 
     /**
      * Returns all Backlogs
      */
-    public function getBacklogs() {
-        return $this->db->fetchRows('SELECT * FROM backlog ORDER BY backlogtitle');
+    public function getBacklogs($projectname) {
+        if ($projectname)
+            return $this->db->fetchRows('SELECT backlog.id, backlogname, backlogtitle, backlog.is_public_viewable, owner_id, project_id, backlog.created, is_project_default FROM backlog WHERE project_id = ? ORDER BY backlogtitle', [$this->getProjectId($projectname)]);
+        else
+            return $this->db->fetchRows('SELECT id, backlogname, backlogtitle, is_public_viewable, owner_id, project_id, created FROM backlog ORDER BY backlogtitle');
     }
 
     /**
      * Returns the Backlog
      */
-    public function getBacklog($backlogName) {
-        return $this->db->fetchRow('SELECT * FROM backlog where backlogname = ?', [$backlogName]);
+    public function getBacklog($projectname, $backlogName) {
+        return $this->db->fetchRow('SELECT * FROM backlog where project_id = ? AND backlogname = ?', [$this->getProjectId($projectname), $backlogName]);
+    }
+
+
+    /**
+     * Returns the name of the fedault backlog for a project
+     */
+    public function getDefaultBacklogName($projectname) {
+        return $this->db->fetchCell('SELECT backlogname FROM backlog where is_project_default = 1 AND project_id = ?', [$this->getProjectId($projectname)]);
     }
 
     /**
@@ -58,7 +67,7 @@ class Backlog {
     /**
      * Creates an item
      */
-    public function createItem($backlogName, $itemData) {
+    public function createItem($projectname, $backlogName, $itemData) {
 
         $detailDefault = <<<EOT
             <p><strong>Requirements</strong></p><ul><li>...</li></ul>
@@ -69,21 +78,21 @@ class Backlog {
 EOT;
 
         $insData =  [
-                     'backlog_id' => $this->getBacklogIdByName($backlogName) , 
+                     'backlog_id' => $this->getBacklogIdByName($projectname, $backlogName) , 
                      'type' => $this->prop($itemData, 'type', 'story'), 
                      'title' => $this->prop($itemData, 'title'), 
                      'text' => $this->prop($itemData, 'text'), 
                      'detail' => $this->prop($itemData, 'detail', $detailDefault), 
                      'points' => $this->prop($itemData, 'points'), 
                      'status' => $this->prop($itemData, 'status', 'open'),
-                     'backlogorder' => $this->getMinBacklogOrder($backlogName) - 1,
+                     'backlogorder' => $this->getMinBacklogOrder($projectname, $backlogName) - 1,
                      'created' => date('Y-m-d H:i:s',time())
                      ];
 
         return $this->db->insert($insData, 'item');
     }
 
-    public function updateItem($backlogName, $id, $itemData) {
+    public function updateItem($projectname, $backlogName, $id, $itemData) {
         $fields = ['type', 'title', 'text', 'detail', 'status', 'points'];
         $udapteData = ['changed' => date('Y-m-d H:i:s',time())];
             
@@ -93,7 +102,7 @@ EOT;
             }
         }
 
-        if ($udapteData['points'] === '') {
+        if (isset($udapteData['points']) && $udapteData['points'] === '') {
             $udapteData['points'] = Null;
         }
 
@@ -104,13 +113,14 @@ EOT;
                 $udapteData['done'] = null;
             }
         }
-        $this->db->update($udapteData, 'item', ['backlog_id' => $this->getBacklogIdByName($backlogName), 'id' => $id]);
+
+        $this->db->update($udapteData, 'item', ['backlog_id' => $this->getBacklogIdByName($projectname, $backlogName), 'id' => $id]);
     }
         
-    public function moveItemToBegin($backlogName, $id) {
-        $this->db->update(['backlogorder' => ($this->getMinBacklogOrder($backlogName) -1)],
+    public function moveItemToBegin($projectname, $backlogName, $id) {
+        $this->db->update(['backlogorder' => ($this->getMinBacklogOrder($projectname, $backlogName) -1)],
                       'item',
-                      ['backlog_id' => $this->getBacklogIdByName($backlogName),
+                      ['backlog_id' => $this->getBacklogIdByName($projectname, $backlogName),
                        'id' => $id]);
     }
 
@@ -119,64 +129,66 @@ EOT;
      * To achive this, the stories backlogorder are set to the same value
      * and then all stories after the 'previousItem' are advanced by one.
      */
-    public function moveItemBehind($backlogName, $id, $previousItemId) {
-        $previousItem = $this->getItem($backlogName, $previousItemId);
+    public function moveItemBehind($projectname, $backlogName, $id, $previousItemId) {
+        $previousItem = $this->getItem($projectname, $backlogName, $previousItemId);
         
         // moving the item at the same position
         $this->db->update(['backlogorder' => $previousItem['backlogorder']],
-                                'item',
-                                ['backlog_id' => $this->getBacklogIdByName($backlogName), 'id' => $id]);
+                          'item',
+                          ['backlog_id' => $this->getBacklogIdByName($projectname, $backlogName), 'id' => $id]);
         
         // moving all following stories one step down
         $this->db->execute('UPDATE item SET backlogorder = backlogorder +1 WHERE backlog_id = ? AND not id = ? AND backlogorder >= ?', 
-                                 [$this->getBacklogIdByName($backlogName), $previousItemId, $previousItem['backlogorder']]);
+                                 [$this->getBacklogIdByName($projectname, $backlogName), $previousItemId, $previousItem['backlogorder']]);
+    }
+
+    /**
+     * Returns the id of a project
+     */
+    public function getProjectId($projectname) {
+        return $this->db->fetchCell('SELECT id from project WHERE name = ?', [$projectname]);
     }
     
     /**
      * Retuns the minimal value for a backlog order within a given backlog.
      */
-    public function getMinBacklogOrder($backlogName) {
-        return $this->db->fetchCell('SELECT MIN(backlogorder) FROM item WHERE backlog_id = ?', [$this->getBacklogIdByName($backlogName)]);
+    public function getMinBacklogOrder($projectname, $backlogName) {
+        return $this->db->fetchCell('SELECT MIN(backlogorder) FROM item WHERE backlog_id = ?', [$this->getBacklogIdByName($projectname, $backlogName)]);
     }
 
-    public function getBacklogIdByName($backlogName) {
-        return $this->db->fetchCell("SELECT id FROM backlog WHERE backlogname = ?", [$backlogName]);
+    public function getBacklogIdByName($projectname, $backlogName) {
+        return $this->db->fetchCell("SELECT id FROM backlog WHERE project_id = ? AND backlogname = ?", [$this->getProjectId($projectname), $backlogName]);
     }
 
     /**
      * returns an array with rights of the current user for the supplied backlog
      */
-    public function getRights($backlogName) {
-        $backlog = $this->getBacklog($backlogName);
-        $isOwner = $backlog['owner_id'] == $this->userId;
-        $rights = [
-                   'read' => $isOwner || $backlog['is_public_viewable'],
-                   'write' => $isOwner
-                   ];
-        return $rights;
+    public function getRights($projectname) {
+        return $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
+                                   [$this->userId, $this->getProjectId($projectname)]);        
     }
 
     /**
      * Returns all Stories within the backlog
      */
-    public function getItems($backlogName) {
+    public function getItems($projectname, $backlogName) {
         return $this->db->fetchRows('SELECT id, type, title, text, detail, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = ? ORDER BY backlogorder', 
-                                          [$this->getBacklogIdByName($backlogName)]);
+                                          [$this->getBacklogIdByName($projectname, $backlogName)]);
     }
 
     /**
      * Returns one Item within the backlog
      */
-    public function getItem($backlogName, $id) {
+    public function getItem($projectname, $backlogName, $id) {
         return $this->db->fetchRow('SELECT id, type, title, text, detail, status, backlogorder, points, done, created, changed FROM item WHERE backlog_id = ? AND id = ?',
-                                         [$this->getBacklogIdByName($backlogName), $id]);
+                                         [$this->getBacklogIdByName($projectname, $backlogName), $id]);
     }
 
     /**
      * Delete one Item within the backlog
      */
-    public function deleteItem($backlogName, $id) {
-        $this->db->delete('item', ['backlog_id' => $this->getBacklogIdByName($backlogName), 'id' => $id]);
+    public function deleteItem($projectname, $backlogName, $id) {
+        $this->db->delete('item', ['backlog_id' => $this->getBacklogIdByName($projectname, $backlogName), 'id' => $id]);
     }
 }
 

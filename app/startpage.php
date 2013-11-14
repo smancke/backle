@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-md-7 col-md-offset-1" id="item-list">
         
-        <ul ng-repeat="backlog in backlogs | filter:searchText ">
+        <ul style="padding-left: 0px;" ng-repeat="backlog in backlogs | filter:searchText ">
           <li class="list-group-item"><i class="glyphicon glyphicon-chevron-right"></i> <a href="<?=cfg_basepath()?>/{{backlog.backlogname}}">{{backlog.backlogtitle}} (/{{backlog.backlogname}})</a></li>
         </ul>
       </div>

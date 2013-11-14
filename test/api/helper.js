@@ -21,8 +21,12 @@ function POST(url, data) {
     })
 }
 
-function POST_BACKLOGS(data) {
-    return POST('/api/backlog', data);
+function POST_BACKLOGS(projectName, data) {
+    return POST('/api/project/'+projectName + '/backlog', data);
+}
+
+function POST_PROJECTS(data) {
+    return POST('/api/project', data);
 }
 
 function GET(url) {
@@ -58,11 +62,23 @@ function login() {
     
 }
 
-function createBacklog(backlogName) {
+function createBacklog(projectName, backlogName) {
     // create backlog
-    POST_BACKLOGS(
-        {backlogname: backlogName,
-         backlogtitle: 'Title for '+backlogName,
+    POST_BACKLOGS(projectName,
+                  {backlogname: backlogName,
+                   backlogtitle: 'Title for '+backlogName,
+                   is_public_viewable: true}
+                 ).fail(function(jqXHR, textStatus, errorThrown) {
+                     if (jqXHR.status != 201) {
+                         self.fail("failed with http status "+ jqXHR.status);
+                     }
+                 });    
+}
+
+function createProject(projectName) {
+    POST_PROJECTS(
+        {name: projectName,
+         title: 'Title for project '+projectName,
          is_public_viewable: true}
     ).fail(function(jqXHR, textStatus, errorThrown) {
         if (jqXHR.status != 201) {

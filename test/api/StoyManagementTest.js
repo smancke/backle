@@ -4,19 +4,24 @@ describe('Story api: ', function() {
     var backlogName;
     var BacklogManagement;
     var self;
+    var backlogListUri;
 
     beforeEach(function() {
         self = this;
+        projectName = 'test-project-'+ randomString();
         backlogName = 'test-backlog-'+ randomString();
-
+        
         login();
-        createBacklog(backlogName);
+        createProject(projectName);
+        //backlogName = projectName;
+        createBacklog(projectName, backlogName);
+        backlogListUri = '/api/project/'+projectName+'/backlog/';
     });
     
     describe('A backlog ressource', function(){
 
         it('should allow creation of a normal story', function() {
-            POST('/api/backlog/'+ backlogName,
+            POST(backlogListUri+ backlogName,
                  {
                      title: 'modify a user',                     
                      text: 'Als Produktverantwortlicher m\u00f6chte ich beliebige Stories in einem Backlog anlegen k\u00f6nnen, damit ich mir merken kann, was alles zu tun ist.',
@@ -42,7 +47,7 @@ describe('Story api: ', function() {
         });
 
         it('should allow creation of an empty story', function() {
-            POST('/api/backlog/'+ backlogName,
+            POST(backlogListUri+ backlogName,
                  {
                  }
             ).done(function(data, textStatus, jqXHR) {
@@ -65,7 +70,7 @@ describe('Story api: ', function() {
         it('should allow update of a story', function() {
             var storyUri;
 
-            POST('/api/backlog/'+ backlogName,
+            POST(backlogListUri+ backlogName,
                  {
                  }
             ).done(function(data, textStatus, jqXHR) {
@@ -133,7 +138,7 @@ describe('Story api: ', function() {
 
 
         it('should allow creation of a release item', function() {
-            POST('/api/backlog/'+ backlogName,
+            POST(backlogListUri+ backlogName,
                  {
                      title: 'Sprint #2',                     
                      type: 'milestone'
@@ -149,7 +154,7 @@ describe('Story api: ', function() {
         it('should allow story point update of an milestone item to "0"', function() {
             var storyUri;
 
-            POST('/api/backlog/'+ backlogName,
+            POST(backlogListUri+ backlogName,
                  {
                      title: 'Sprint #2',                     
                      type: 'milestone'
@@ -175,7 +180,7 @@ describe('Story api: ', function() {
 
         it('should allow fetching all the stories of the backlog', function() {
             for (var i=0; i<3; i++) {
-                POST('/api/backlog/'+ backlogName,
+                POST(backlogListUri+ backlogName,
                      {
                          title: 'modify a user',                     
                          text: 'Als Produktverantwortlicher ...',
@@ -183,13 +188,13 @@ describe('Story api: ', function() {
                          points: 13
                      }
                     ).done(function() {
-                        GET('/api/backlog/'+ backlogName)
+                        GET(backlogListUri+ backlogName)
                             .done(function(data, textStatus, jqXHR) {
                                 expect(data.length).toEqual(i+1);
                                 expect(data[0].type).toEqual('story');
                                 expect(data[0].title).toEqual('modify a user');
                                 expect(data[0].text).toEqual('Als Produktverantwortlicher ...');
-                                expect(data[0].detail).not.toBeDefined(); //no detail in list
+                                expect(data[0].detail).toEqual('bla bla'); //no detail in list
                                 expect(data[0].points).toEqual('13'); //TODO: This shoud be an integer
                                 expect(data[0].status).toEqual('open');                
                                 expect(data[0].backlogorder).toBeDefined();
@@ -205,21 +210,21 @@ describe('Story api: ', function() {
 
         function createABunchOfStories(count) {
             for(var i=0; i<count; i++) {
-                POST('/api/backlog/'+ backlogName, {});
+                POST(backlogListUri+ backlogName, {});
             }
         }
 
         it('should allow moving a story from position 3 to begin', function() {
             var storyUri;
             createABunchOfStories(3);
-            GET('/api/backlog/'+ backlogName)            
+            GET(backlogListUri+ backlogName)            
                 .done(function(initialList, textStatus, jqXHR) {
                     movingId = initialList[2].id;
 
                     PUT(createProxyURL(initialList[2].self +'/moveItemBehind'),
                          {previousItem: 'begin'}).done(function() {
                              
-                             GET('/api/backlog/'+ backlogName)            
+                             GET(backlogListUri+ backlogName)            
                                  .done(function(newList, textStatus, jqXHR) {
                                      expect(movingId).toEqual(newList[0].id);                                    
                                  }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -238,7 +243,7 @@ describe('Story api: ', function() {
         it('should allow moving a story from position 5 to position 3', function() {
             var storyUri;
             createABunchOfStories(6);
-            GET('/api/backlog/'+ backlogName)            
+            GET(backlogListUri+ backlogName)            
                 .done(function(initialList, textStatus, jqXHR) {
                     movingId = initialList[4].id;
                     targetId = initialList[1].id;
@@ -246,7 +251,7 @@ describe('Story api: ', function() {
                     PUT(createProxyURL(initialList[4].self +'/moveItemBehind'),
                          {previousItem: targetId}).done(function() {
                              
-                             GET('/api/backlog/'+ backlogName)            
+                             GET(backlogListUri+ backlogName)            
                                  .done(function(newList, textStatus, jqXHR) {
                                      expect(movingId).toEqual(newList[2].id);
                                      expect(initialList[0].id).toEqual(newList[0].id);

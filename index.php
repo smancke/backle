@@ -21,6 +21,11 @@ $app->get('/', function() use($app) {
         require 'app/startpage.php';
     });
 
+$app->get('/projects/:projectname', function($projectname) use($app) {
+        $app->projectname = $projectname;
+        require 'app/projectStartpage.php';
+    });
+
 $app->get('/c/loginRedirect', function() use($app) {
         var_dump($app->cfg);
         $googleLogin = new GoogleLoginProvider($app->cfg['google']);

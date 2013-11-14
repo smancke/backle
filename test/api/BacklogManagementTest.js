@@ -1,26 +1,25 @@
 
 describe('Backlog api: ', function() {
     
+    var projectName;
     var backlogName;
-    var self;
+    self;
 
     beforeEach(function() {
         self = this;
+        projectName = 'test-project-'+ randomString();
         backlogName = 'test-backlog-'+ randomString();
         
         login();
-        createBacklog(backlogName);
+        createProject(projectName);
+        createBacklog(projectName, backlogName);
     });
     
     describe('A backlog ressource', function(){
 
-        if('should be available by its uri', function() {
-            //TODO: implement
-        })
-         
         it('should return the available backlogs', function() {
-            GET('/api/backlog').done(function(data) {
-                expect(data.length).toBeGreaterThan(0);
+            GET('/api/project/'+projectName+'/backlog').done(function(data) {
+                expect(data.length).toEqual(2);
                 var createdBacklog = jQuery.grep(data, function (value) {
                     return value.backlogname == backlogName;
                 });
@@ -29,10 +28,22 @@ describe('Backlog api: ', function() {
                 self.fail("failed with http status "+ jqXHR.status);
             });           
         });
+
+        it('the default backlog should be available by the alias default', function() {
+            GET('/api/project/'+projectName+'/backlog/default').done(function(data) {                
+                expect(data.length).toEqual(0);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });
+        });
+
         
         it('should not allow using the same backlog name twice', function() {
-            POST_BACKLOGS(
-                {backlogname: backlogName}
+            POST_BACKLOGS(projectName,
+                          {backlogname: backlogName,
+                           backlogtitle: 'bla',
+                           is_public_viewable: true}
+
             ).done(function(data, textStatus, jqXHR) {
                 self.fail("failed with http status "+ jqXHR.status);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -41,8 +52,10 @@ describe('Backlog api: ', function() {
         });
 
         it('should not allow to create backlogs with the name "api"', function() {
-            POST_BACKLOGS(
-                {backlogname: "api"}
+            POST_BACKLOGS(projectName,
+                          {backlogname: "api",
+                           backlogtitle: 'bla',
+                           is_public_viewable: true}
             ).done(function(data, textStatus, jqXHR) {
                 self.fail("failed with http status "+ jqXHR.status);
             }).fail(function(jqXHR, textStatus, errorThrown) {

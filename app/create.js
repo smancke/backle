@@ -8,27 +8,46 @@ backle.controller('CreateCtrl', ['$scope', '$http', '$sce', function($scope, $ht
     $scope.alertType = undefined;
 
     $scope.projectname = global_projectname;
-    $scope.backlogname = global_backlogname;
-    $scope.backlogtitle = global_backlogname;
+    $scope.name = global_backlogname;
+    $scope.title = global_backlogname;
     $scope.is_public_viewable = true;
 
     $scope.create = function() {
         $scope.alertHtmlMessage = '';
         $scope.alertType = '';
 
-        var data = {
-            projectname: $scope.projectname,
-            backlogname: $scope.backlogname,
-            backlogtitle: $scope.backlogtitle,
-            is_public_viewable: $scope.is_public_viewable
-        };
+        var uri;
+        var data;
 
-        $http.post(global_basepath +'/api/backlog', data)
+        // if no projectname was given, we are creating a project with default backlog
+        if (! $scope.projectname) {
+
+            uri = global_basepath +'/api/project';
+            data = {
+                name: $scope.name,
+                title: $scope.title,
+                is_public_viewable: $scope.is_public_viewable
+            };
+        }
+        // but if the projectname was set,
+        // we will yust create an additional backlog within the project
+        else {
+
+            uri = global_basepath +'/api/project/' + $scope.projectname +'/backlog';
+            data = {
+                backlogname: $scope.name,
+                backlogtitle: $scope.title,
+                is_public_viewable: $scope.is_public_viewable,
+            };
+
+        }
+
+        $http.post(uri, data)
             .success(function() {
-                $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' created!</h3>Redirecting ...");
+                $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>"+ $scope.title + " created!</h3>Redirecting ...");
                 $scope.alertType = 'alert alert-success';
                 window.setTimeout(function() {
-                    window.location.href = global_basepath +'/' + $scope.backlogname;
+                    window.location.href = global_basepath +'/' + ($scope.projectname ? $scope.projectname+'/' : '') + $scope.name;
                 },1000);
             })
             .error(function(result) {

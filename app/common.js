@@ -77,8 +77,6 @@ backle.controller('HeaderCtrl', ['$scope', '$http', '$sce', function($scope, $ht
     $scope.backlogPresent = false;
     
     if ($scope.backlogname) {
-        if (global_backlogname) {
-            $scope.backlogPresent = true;
-        }
+        $scope.backlogPresent = true;
     }
 }]);

@@ -13,7 +13,8 @@
 
     <br>
     <div class="well" style="width: 400px; margin: auto">
-      <h3>Create Backlog</h3>
+      <h3 ng-show="!projectname">Create Project</h3>
+      <h3 ng-show="projectname">Create Backlog</h3>
       <div class="{{alertType}}" ng-bind-html="alertHtmlMessage"></div>
       <form role="form">
 
@@ -22,11 +23,11 @@
         </div>
         <div class="form-group">
           <label for="name">Name</label>          
-          <input id="name" type="text" placeholder="e.g. my_backlog" class="form-control" style="width: 300px;" ng-model="backlogname">
+          <input id="name" type="text" placeholder="e.g. my_backlog" class="form-control" ng-model="name">
         </div>
         <div class="form-group">
           <label for="title">Title</label>          
-          <input id="title" type="text" placeholder="e.g. My cool Backlog" class="form-control" style="width: 300px;" ng-model="backlogtitle">
+          <input id="title" type="text" placeholder="e.g. My cool Backlog" class="form-control" ng-model="title">
         </div>
         <div class="checkbox">
           <label>
