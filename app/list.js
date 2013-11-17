@@ -49,7 +49,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
 
     $scope.moveStoryBefore = function(movingId, previousItemId) {
         data = {previousItem: previousItemId}
-        $http.put(global_basepath + '/api/backlog/' + $scope.backlogname +'/'+movingId+'/moveItemBehind', data);
+        $http.put(global_backlog_basepath +'/'+movingId+'/moveItemBehind', data);
         var from = $scope.getStoryPosition(movingId);
         var removedItem = $scope.backlogItems.splice(from, 1)[0];
         var to = 1 + $scope.getStoryPosition(previousItemId);
@@ -111,7 +111,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             var toPosition = 0;
             if (placeBehindId) {
                 postData = {previousItem: placeBehindId}
-                $http.put(global_basepath +'/api/backlog/' + $scope.backlogname +'/'+newItem.id+'/moveItemBehind', postData);
+                $http.put(global_backlog_basepath +'/'+newItem.id+'/moveItemBehind', postData);
                 toPosition = $scope.getStoryPosition(placeBehindId) + 1;
             } 
             $scope.backlogItems.splice(toPosition, 0, newItem);

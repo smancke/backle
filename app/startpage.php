@@ -15,22 +15,14 @@
     <div class="row">
       <div class="col-md-7 col-md-offset-1" id="item-list">
         
-        <ul style="padding-left: 0px;" ng-repeat="backlog in backlogs | filter:searchText ">
-          <li class="list-group-item"><i class="glyphicon glyphicon-chevron-right"></i> <a href="<?=cfg_basepath()?>/{{backlog.backlogname}}">{{backlog.backlogtitle}} (/{{backlog.backlogname}})</a></li>
+        <ul style="padding-left: 0px;" ng-repeat="project in projects | filter:searchText ">
+          <li class="list-group-item"><i class="glyphicon glyphicon-chevron-right"></i> <a href="<?=cfg_basepath()?>/{{project.name}}">{{project.title}} (/{{project.name}})</a></li>
         </ul>
       </div>
       <div class="well" style="width: 300px; margin: 0px 0px 20px 30px; padding: 5px; float:left;">
         You can create your own backlog in a few seconds.
         
-        <a href="<?=cfg_basepath()?>/c/create"><span class="glyphicon glyphicon-arrow-right"></span> create a backlog</a>
-<!--
-        <br>
-        <br>
-        If you have to manage a group of people or multiple backlogs,
-        you may collect them within a project.
-        <br>
         <a href="<?=cfg_basepath()?>/c/create"><span class="glyphicon glyphicon-arrow-right"></span> create a project</a>
--->
         <br>
 
         <h3>search for backlogs:</h3>

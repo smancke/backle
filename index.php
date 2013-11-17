@@ -91,12 +91,27 @@ $app->get('/c/create', function() use($app) {
         require 'app/create.php';
     });
 
-$app->get('/:backlog', function($backlogname) use($app) {
+$app->get('/:project', function($projectname) use($app) {
+        $app->projectname = $projectname;
+        $app->backlogname = 'default';
+        require 'app/list.php';
+    });
+
+$app->get('/:project/backlog/:backlogname', function($projectname, $backlogname) use($app) {
+        $app->projectname = $projectname;
         $app->backlogname = $backlogname;
         require 'app/list.php';
     });
 
-$app->get('/:backlog/:story', function($backlogname, $storyid) use($app) {
+$app->get('/:project/:story', function($projectname, $storyid) use($app) {
+        $app->projectname = $projectname;
+        $app->backlogname = 'default';
+        $app->storyid = $storyid;
+        require 'app/detail.php';
+    });
+
+$app->get('/:project/backlog/:backlogname/:story', function($projectname, $backlogname, $storyid) use($app) {
+        $app->projectname = $projectname;
         $app->backlogname = $backlogname;
         $app->storyid = $storyid;
         require 'app/detail.php';

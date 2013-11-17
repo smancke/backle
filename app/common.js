@@ -64,7 +64,7 @@ backle.directive('contenteditable', function() {
 });
 
 backle.factory('Backlog', function($resource){
-    return $resource(global_basepath + '/api/backlog/:backlog/:item', {backlog: global_backlogname, item: '@id'}, {
+    return $resource(global_backlog_basepath + '/:item', {item: '@id'}, {
         query: {method:'GET', params:{}, isArray:true},
         update: {method:'PUT', params:{}, isArray:false}
     });

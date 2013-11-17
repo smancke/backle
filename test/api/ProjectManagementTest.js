@@ -24,6 +24,20 @@ describe('Project api: ', function() {
             });           
         });
 
+        it('it should be possible to retrieve the list of', function() {
+            createProject(projectName);
+            
+            GET('/api/project').done(function(data) {
+                var found = jQuery.grep(data, function (value) {
+                    return value.name == projectName;
+                });
+
+                expect(found[0].name).toEqual(projectName);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self.fail("failed with http status "+ jqXHR.status);
+            });           
+        });
+
         it('a project shoud have one default backlog', function() {
             var title = 'Title for project '+projectName;
             POST_PROJECTS(

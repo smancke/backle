@@ -15,15 +15,15 @@ $app->add(new \SlimDatabaseMW($cfg));
 $app->add(new \AuthMW($cfg));
 $app->response->headers->set('Content-Type', 'application/json');
 
-//// list all backlogs
-//$app->get('/backlog', function() use($app) {
-//        $backlogs = $app->backlog->getBacklogs($app->request->params('projectname'));
-//        for ($i=0; $i<count($backlogs); $i++) {
-//            $backlogs[$i]['self'] = urlFor('stories', ['backlogName' => $backlogs[$i]['backlogname']]);
-//        }
-//        echo json_encode($backlogs);    
-//    })->name("backlogs");
-   
+// list all projects
+$app->get('/project', function() use($app) {
+        $projects = $app->userMgr->getMyOrPublicProjects();
+        for ($i=0; $i<count($projects); $i++) {
+            $backlogs[$i]['self'] = urlFor('project', ['backlogName' => $projects[$i]['name']]);
+        }
+        echo json_encode($projects);    
+    })->name("projects");
+
 //create a project with default backlog
 $app->post('/project', function () use ($app) {
         if (! $app->userInfo) {
@@ -95,23 +95,6 @@ $app->get('/project/:projectname/backlog', function($projectname) use ($app) {
         }
         echo json_encode($backlogs);    
     })->name('backlogs');
-
-// return the default backlog 
-$app->get('/project/:projectname/backlog/default', function($projectname) use ($app) {
-        if (! $app->backlog->getRights($projectname)['read']){
-            notFoundError("Object not found: $projectname/default");
-        }
-
-        $backlogName = $app->backlog->getDefaultBacklogName($projectname);
-
-        $stories = $app->backlog->getItems($projectname, $backlogName);
-        for ($i=0; $i<count($stories); $i++) {
-            $stories[$i]['self'] = urlFor('item', ['projectname' => $projectname,
-                                                   'backlogName' => $backlogName, 
-                                                   'itemid' => $stories[$i]['id']]);
-        }
-        echo json_encode($stories);
-    })->name('defaultstories');
 
 // return a contents of a backlog 
 $app->get('/project/:projectname/backlog/:backlogName', function($projectname, $backlogName) use ($app) {

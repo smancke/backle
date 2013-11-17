@@ -157,15 +157,28 @@ EOT;
     }
 
     public function getBacklogIdByName($projectname, $backlogName) {
-        return $this->db->fetchCell("SELECT id FROM backlog WHERE project_id = ? AND backlogname = ?", [$this->getProjectId($projectname), $backlogName]);
+        if ($backlogName == 'default') {
+            return $this->db->fetchCell('SELECT id FROM backlog WHERE is_project_default = 1 AND project_id = ?', [$this->getProjectId($projectname)]);
+        } else {
+            return $this->db->fetchCell("SELECT id FROM backlog WHERE project_id = ? AND backlogname = ?", [$this->getProjectId($projectname), $backlogName]);
+        }
     }
 
     /**
      * returns an array with rights of the current user for the supplied backlog
      */
     public function getRights($projectname) {
-        return $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
-                                   [$this->userId, $this->getProjectId($projectname)]);        
+        $userRights = $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
+                                          [$this->userId, $this->getProjectId($projectname)]);
+        if (!$userRights) {
+            $userRights = ['read' => 0,
+                           'owner' => 0,
+                           'write' => 0];
+        }
+        if (!$userRights['read']) {
+            $userRights['read'] = $this->db->fetchCell('SELECT is_public_viewable from project WHERE name = ?', [$projectname]);
+        }
+        return $userRights;
     }
 
     /**

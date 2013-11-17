@@ -10,12 +10,16 @@
     <link href="<?=cfg_basepath()?>/app/lib/bootstrap.css" rel="stylesheet" media="screen">
     <script>
 <?php 
-         $backlogName = $app->backlogname ? $app->backlogname : $app->request->params('backlogname');
-         echo "        global_backlog_permissions = ". json_encode($app->backlog->getRights($backlogName)) .";\n";
-         echo "        global_projectname = '" .  ($app->projectname ? $app->projectname : $app->request->params('projectname')) ."';\n";
-         echo "        global_backlogname = '" .  ($backlogName) ."';\n";
-         echo "        global_storyid = '" . ($app->storyid ? $app->storyid : $app->request->params('storyid')) ."';\n";
-         echo "        global_basepath = '". cfg_basepath() ."';\n";
+$backlogName = $app->backlogname ? $app->backlogname : $app->request->params('backlogname');
+$projectName = $app->projectname ? $app->projectname : $app->request->params('projectname');
+echo "        global_backlog_permissions = ". json_encode($app->backlog->getRights($projectName)) .";\n";
+echo "        global_projectname = '" . $projectName ."';\n";
+echo "        global_backlogname = '" .  ($backlogName) ."';\n";
+echo "        global_storyid = '" . ($app->storyid ? $app->storyid : $app->request->params('storyid')) ."';\n";
+echo "        global_basepath = '". cfg_basepath() ."';\n";
+if ($projectName) {
+    echo "        global_backlog_basepath = '". cfg_basepath() ."/api/project/$projectName/backlog/$backlogName';\n";
+}
 //        echo "        global_user = '". ($app->user != null && property_exists($app->user, 'user')) ? $app->user->username : '' ."';\n";
      ?>
     </script>

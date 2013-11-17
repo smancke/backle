@@ -11,11 +11,6 @@
       <ul class="nav navbar-nav">
       </ul>
 
-<!--
-      <div class="navbar-form navbar-right" role="search">
-        <input ng-show="backlogPresent" type="text" name="search" class="form-control" id="search" placeholder="search .."/>
-      </div>
--->
       <div class="navbar-right">
         <ul class="nav navbar-nav">
           <li><a tabindex="-1" href="<?=cfg_basepath()?>/">backlogs</a></li>
