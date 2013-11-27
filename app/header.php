@@ -5,7 +5,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a tabindex="-1" ng-show="backlogPresent" class="navbar-brand" href="<?=cfg_basepath()?>/{{backlogname}}">Backlog: {{backlogname}}</a>
+     <?php if(isset($projectname)): ?>
+        <a tabindex="-1" class="navbar-brand" href="<?=cfg_basepath()?>/<?=$projectname?>"><?=$projectname?></a>
+     <?php endif ?>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
@@ -15,7 +17,7 @@
         <ul class="nav navbar-nav">
           <li><a tabindex="-1" href="<?=cfg_basepath()?>/">backlogs</a></li>
 <?php if ($app->userInfo): ?>
-          <li><a tabindex="-1" href="<?=cfg_basepath()?>/c/create">create backlog</a></li>
+          <li><a tabindex="-1" href="<?=cfg_basepath()?>/c/create">create project</a></li>
         <li class="dropdown">
          <a tabindex="-1" style="padding: 0px;" class="dropdown-toggle" data-toggle="dropdown" href="#">
 <?php if ($app->userInfo['image_url']): ?>
