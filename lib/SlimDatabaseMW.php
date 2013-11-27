@@ -12,31 +12,19 @@ class SlimDatabaseMW extends \Slim\Middleware
     
     public function call()
     {
-        global $_COOKIE;
-
         $app = $this->app;
         $app->cfg = $this->cfg;
 
-        $db = new dbFacile_mysql();
-        $db->open($this->cfg['dbname'], $this->cfg['dbuser'], $this->cfg['dbpassword'], $this->cfg['dbhost']);
+        $app->db = new dbFacile_mysql();
+        $app->db->open($this->cfg['dbname'], $this->cfg['dbuser'], $this->cfg['dbpassword'], $this->cfg['dbhost']);
         if ($this->cfg['dblogfile'])
-            $db->setLogile($this->cfg['dblogfile']);
-              
-        
-        $app->backlog = new Backlog($db);
-
-        $app->userMgr = new UserManager($db);
-        if (isset($_COOKIE['s'])) {
-            if ($app->userMgr->pickUpSession($_COOKIE['s'])) {
-                $app->userInfo = $app->userMgr->getUserInfo();
-                $app->backlog->setUserId($app->userInfo['id']);
-            }
-        }
-        //$app->backlog->setUserId(1);
+            $app->db->setLogile($this->cfg['dblogfile']);
+                     
+        $app->backlog = new Backlog($app->db);
 
         // Run inner middleware and application
         $this->next->call();
 
-        $db->close();
+        $app->db->close();
     }
 }

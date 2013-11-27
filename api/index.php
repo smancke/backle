@@ -11,8 +11,8 @@ require_once '../app/SimpleOAuthLogin/UserManager.php';
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
-$app->add(new \SlimDatabaseMW($cfg));
 $app->add(new \AuthMW($cfg));
+$app->add(new \SlimDatabaseMW($cfg));
 $app->response->headers->set('Content-Type', 'application/json');
 
 // list all projects

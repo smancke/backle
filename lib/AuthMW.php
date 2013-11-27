@@ -10,12 +10,16 @@ class AuthMW extends \Slim\Middleware
     
     public function call()
     {
-        $cookieValueJson = $this->app->getCookie('backle_auth');
-        if ($cookieValueJson) {
-            $cookieValue = json_decode($cookieValueJson);
-            $this->app->user = $cookieValue;
-        } else {
-            $this->app->user = null;
+        global $_COOKIE;
+
+        $app = $this->app;
+
+        $app->userMgr = new UserManager($app->db);
+        if (isset($_COOKIE['s'])) {
+            if ($app->userMgr->pickUpSession($_COOKIE['s'])) {
+                $app->userInfo = $app->userMgr->getUserInfo();
+                $app->backlog->setUserId($app->userInfo['id']);
+            }
         }
 
         // Run inner middleware and application

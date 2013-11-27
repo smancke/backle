@@ -12,8 +12,8 @@ require_once 'config.php';
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim(array());
-$app->add(new \SlimDatabaseMW($cfg));
 $app->add(new \AuthMW($cfg));
+$app->add(new \SlimDatabaseMW($cfg));
 $app->response->headers->set('Content-Type', 'text/html');
 
 
