@@ -16,6 +16,8 @@ $cfg['google']['client_id'] = 'your-client-id.apps.googleusercontent.com';
 $cfg['google']['client_secret'] = 'your-client-secret-hlkmlzztmnksdcsd';
 $cfg['google']['redirect_uri'] = 'http://127.0.0.1/app/c/login';
 
+$cfg['embedded_in_gforge'] = false;
+
 function cfg_basepath() {
     global $cfg;
     return $cfg['basepath'];

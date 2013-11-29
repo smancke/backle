@@ -12,6 +12,11 @@ require_once '../app/SimpleOAuthLogin/UserManager.php';
 
 $app = new \Slim\Slim();
 $app->add(new \AuthMW($cfg));
+if (isset($cfg['embedded_in_gforge']) && $cfg['embedded_in_gforge']) {
+    $app->add(new \GForgeAuthMW($cfg));
+} else {
+    $app->add(new \AuthMW($cfg));
+}
 $app->add(new \SlimDatabaseMW($cfg));
 $app->response->headers->set('Content-Type', 'application/json');
 
