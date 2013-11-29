@@ -38,7 +38,7 @@ CREATE TABLE `backlog` (
   KEY `owner_id` (`owner_id`),
   CONSTRAINT `backlog_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`),
   CONSTRAINT `backlog_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5046 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5048 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,8 +62,12 @@ CREATE TABLE `item` (
   `created` datetime NOT NULL,
   `changed` datetime DEFAULT NULL,
   `done` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30034 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `backlog_id` (`backlog_id`),
+  KEY `author_id` (`author_id`),
+  CONSTRAINT `item_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `item_ibfk_1` FOREIGN KEY (`backlog_id`) REFERENCES `backlog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=30042 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +85,7 @@ CREATE TABLE `project` (
   `is_public_viewable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=989 DEFAULT CHARSET=utf8 COLLATE=utf8_roman_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=991 DEFAULT CHARSET=utf8 COLLATE=utf8_roman_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +124,7 @@ CREATE TABLE `user` (
   `last_login` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `origin` (`origin`,`external_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,3 +175,4 @@ CREATE TABLE `user_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- Dump completed on 2013-11-29 20:02:08

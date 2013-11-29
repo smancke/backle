@@ -86,6 +86,7 @@ EOT;
                      'points' => $this->prop($itemData, 'points'), 
                      'status' => $this->prop($itemData, 'status', 'open'),
                      'backlogorder' => $this->getMinBacklogOrder($projectname, $backlogName) - 1,
+                     'author_id' => $this->userId,
                      'created' => date('Y-m-d H:i:s',time())
                      ];
 
