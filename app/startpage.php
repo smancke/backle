@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html ng-app="backle">
-  <head>
-    <title>backle - the agile backlog</title>
+<?php
 
-    <?php include('headSection.php') ?>
+$app->backle->writeHead('the agile backlog',
+                              ['/app/startpage.js', '/app/common.js']);
 
-    <script src="<?=cfg_basepath()?>/app/startpage.js"></script>
-    <script src="<?=cfg_basepath()?>/app/common.js"></script>
-  </head>
-  <body ng-controller="IndexCtrl">
-<?php include('header.php') ?>
+$app->backle->writePageHeader();
+
+?>
 
     <br>
-    <div class="row">
+    <div class="row" ng-controller="IndexCtrl">
       <div class="col-md-7 col-md-offset-1" id="item-list">
         
         <ul style="padding-left: 0px;" ng-repeat="project in projects | filter:searchText ">

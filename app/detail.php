@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html ng-app="backle" ng-controller="DetailCtrl">
-  <head>
-    <title>backle - {{story.title}}</title>
+<?php
 
-    <?php include('headSection.php') ?>
+$app->backle->writeHead('the agile backlog',
+                        ['/app/lib/ckeditor/ckeditor.js', '/app/detail.js', '/app/common.js']);
 
-    <script src="<?=cfg_basepath()?>/app/lib/ckeditor/ckeditor.js"></script>    
-    <script src="<?=cfg_basepath()?>/app/detail.js"></script>    
-    <script src="<?=cfg_basepath()?>/app/common.js"></script>
-  </head>
-  <body>
-    <?php include('header.php') ?>
+$app->backle->writePageHeader();
 
-    <br>
+?>
+
+  <div ng-controller="DetailCtrl">
     <div class="row">
       <div class="col-md-5 col-md-offset-1">
         <a href="<?=cfg_basepath()?>/<?=$projectname?>"
@@ -35,7 +30,7 @@
           </div>
            <div class="panel-body">
             <div class="row">       
-            <div class="col-md-8" ckedit="story.detail" contentEditable="{{permissions.write == 1}}" style="min-height:300px;"></div>
+            <div class="col-md-8" ckedit="story.detail" style="min-height:300px;"></div>
               <div class="col-md-4">
                 <br/>
                 <div class="row">
@@ -66,6 +61,7 @@
           </div>
        </div>
      </div>
+  </div>
      
   </body>
 </html>

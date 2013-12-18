@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html ng-app="backle">
-  <head>
-    <title>Create Backlog</title>
+<?php
 
-    <?php include('headSection.php') ?>
-    
-    <script src="<?=cfg_basepath()?>/app/create.js"></script>
-    <script src="<?=cfg_basepath()?>/app/common.js"></script>
-  </head>
-  <body ng-controller="CreateCtrl">
-<?php include('header.php') ?>
+$app->backle->writeHead('the agile backlog',
+                              ['/app/create.js', '/app/common.js']);
 
-    <br>
+$app->backle->writePageHeader();
+
+?>
+
+<br>
+<div ng-controller="CreateCtrl">
     <div class="well" style="width: 400px; margin: auto">
       <h3 ng-show="!projectname">Create Project</h3>
       <h3 ng-show="projectname">Create Backlog</h3>
@@ -38,5 +35,6 @@
         <input type="submit" value="Create Now!" class="btn btn-large" ng-click="create()"/>
       </form>
     </div>
+</div>
   </body>
 </html>

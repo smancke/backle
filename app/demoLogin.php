@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Backl demo login</title>
+<?php
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <?php include('headSection.php') ?>
-  </head>
-  <body>
-<?php include('header.php') ?>
+$app->backle->writeHead('the agile backlog', []);
+
+$app->backle->writePageHeader();
+
+?>
 
     <br>
     <div class="well" style="width: 400px; margin: auto">

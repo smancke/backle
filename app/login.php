@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html ng-app="backle">
-  <head>
-    <title>backle - login</title>
+<?php
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <?php include('headSection.php') ?>
-    <script src="<?=cfg_basepath()?>/app/login.js"></script>
-    <script src="<?=cfg_basepath()?>/app/common.js"></script>
-  </head>
-  <body>
-<?php include('header.php') ?>
+$app->backle->writeHead('the agile backlog',
+                              ['/app/login.js', '/app/common.js']);
 
-   <?php
+$app->backle->writePageHeader();
 
 if ($errorMessage) {
       echo '<div class="alert alert-danger">'.$errorMessage.'</div>';
 }
 
-   ?>
+?>
     <br>
     <div class="thumbnail center well text-center">
       <br>

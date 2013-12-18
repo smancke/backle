@@ -7,16 +7,21 @@ require '../lib/Slim/Slim.php';
 require '../config.php';
 require 'helper.php';
 require_once '../app/SimpleOAuthLogin/UserManager.php';
+require_once '../app/Backle.php';
 
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
-$app->add(new \AuthMW($cfg));
+
 if (isset($cfg['embedded_in_gforge']) && $cfg['embedded_in_gforge']) {
-    $app->add(new \GForgeAuthMW($cfg));
+    require_once '../gforge/BackleGForge.php';
+    $app->backle = new BackleGForge($app, $cfg);
 } else {
-    $app->add(new \AuthMW($cfg));
+    $app->backle = new Backle($app, $cfg);
 }
+$app->backle->setup();
+
+$app->add($app->backle->createSlimAuthMiddleware());
 $app->add(new \SlimDatabaseMW($cfg));
 $app->response->headers->set('Content-Type', 'application/json');
 

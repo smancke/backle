@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html ng-app="backle">
-  <head>
-    <title>Backlog</title>
+<?php
 
-    <?php include('headSection.php') ?>
-    
-    <script src="<?=cfg_basepath()?>/app/list.js"></script>
-    <script src="<?=cfg_basepath()?>/app/common.js"></script>
-  </head>
-  <body style="overflow-y:auto">
-    
-    <?php include('header.php') ?>
+$app->backle->writeHead('the agile backlog',
+                              ['/app/list.js', '/app/common.js']);
+
+$app->backle->writePageHeader();
+
+?>
 
     <!-- content -->
     <br>

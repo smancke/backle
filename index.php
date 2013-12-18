@@ -8,15 +8,23 @@ require 'api/Backlog.php';
 require 'lib/dbFacile/dbFacile_mysql.php';
 require 'lib/Slim/Slim.php';
 require_once 'config.php';
+require_once 'app/Backle.php';
 
 \Slim\Slim::registerAutoloader();
 
+// TODO: introduce Backle Class for top level configuration of the app
+
 $app = new \Slim\Slim(array());
+
 if (isset($cfg['embedded_in_gforge']) && $cfg['embedded_in_gforge']) {
-    $app->add(new \GForgeAuthMW($cfg));
+    require_once 'gforge/BackleGForge.php';
+    $app->backle = new BackleGForge($app, $cfg);
 } else {
-    $app->add(new \AuthMW($cfg));
+    $app->backle = new Backle($app, $cfg);
 }
+$app->backle->setup();
+
+$app->add($app->backle->createSlimAuthMiddleware());
 $app->add(new \SlimDatabaseMW($cfg));
 $app->response->headers->set('Content-Type', 'text/html');
 
@@ -26,7 +34,7 @@ $app->get('/', function() use($app) {
     });
 
 $app->get('/projects/:projectname', function($projectname) use($app) {
-        $app->projectname = $projectname;
+        $app->backle->setProjectName($projectname);
         require 'app/projectStartpage.php';
     });
 
@@ -96,32 +104,27 @@ $app->get('/c/create', function() use($app) {
     });
 
 $app->get('/:project', function($projectname) use($app) {
-        $app->projectname = $projectname;
-        $app->backlogname = 'default';
+        $app->backle->setProjectName($projectname);
         require 'app/list.php';
     });
 
 $app->get('/:project/backlog/:backlogname', function($projectname, $backlogname) use($app) {
-        $app->projectname = $projectname;
-        $app->backlogname = $backlogname;
+        $app->backle->setProjectName($projectname);
+        $app->backle->setBacklogName($backlogname);
         require 'app/list.php';
     });
 
 $app->get('/:project/:story', function($projectname, $storyid) use($app) {
-        $app->projectname = $projectname;
-        $app->backlogname = 'default';
-        $app->storyid = $storyid;
+        $app->backle->setProjectName($projectname);
+        $app->backle->setStoryId($storyid);
         require 'app/detail.php';
     });
 
 $app->get('/:project/backlog/:backlogname/:story', function($projectname, $backlogname, $storyid) use($app) {
-        $app->projectname = $projectname;
-        $app->backlogname = $backlogname;
-        $app->storyid = $storyid;
+        $app->backle->setProjectName($projectname);
+        $app->backle->setBacklogName($backlogname);
+        $app->backle->setStoryId($storyid);
         require 'app/detail.php';
     });
 
-
 $app->run();
-
-
