@@ -2,6 +2,7 @@
 
 $cfg['basepath'] = '/backle';
 
+$cfg['dbtype'] = 'mysql'; // 'postgresql' or 'mysql'
 $cfg['dbhost'] = 'localhost';
 $cfg['dbuser'] = 'backle';
 $cfg['dbpassword'] = 'backle';

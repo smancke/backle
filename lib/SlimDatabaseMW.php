@@ -15,7 +15,14 @@ class SlimDatabaseMW extends \Slim\Middleware
         $app = $this->app;
         $app->cfg = $this->cfg;
 
-        $app->db = new dbFacile_mysql();
+        if ($this->cfg['dbtype'] == 'mysql') {
+            $app->db = new dbFacile_mysql();
+        } else if ($this->cfg['dbtype'] == 'postgresql') {
+            $app->db = new dbFacile_postgresql();
+        } else {
+            throw new Exception("DB type not supported: '". $this->cfg['dbtype'] ."'");
+        }
+
         $app->db->open($this->cfg['dbname'], $this->cfg['dbuser'], $this->cfg['dbpassword'], $this->cfg['dbhost']);
         if ($this->cfg['dblogfile'])
             $app->db->setLogile($this->cfg['dblogfile']);

@@ -169,8 +169,12 @@ EOT;
      * returns an array with rights of the current user for the supplied backlog
      */
     public function getRights($projectname) {
-        $userRights = $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
-                                          [$this->userId, $this->getProjectId($projectname)]);
+        $userRights = Null;
+        if ($this->userId && $this->getProjectId($projectname) ) {
+            $userRights = $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
+                                              [$this->userId, $this->getProjectId($projectname)]);
+        }
+
         if (!$userRights) {
             $userRights = ['read' => 0,
                            'owner' => 0,

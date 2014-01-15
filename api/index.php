@@ -1,11 +1,12 @@
 <?php
 
 date_default_timezone_set("Europe/Berlin");
-require 'Backlog.php';
-require '../lib/dbFacile/dbFacile_mysql.php';
-require '../lib/Slim/Slim.php';
-require '../config.php';
-require 'helper.php';
+require_once 'Backlog.php';
+require_once '../lib/Slim/Slim.php';
+require_once '../config.php';
+require_once 'helper.php';
+require_once '../lib/dbFacile/dbFacile_mysql.php';
+require_once '../lib/dbFacile/dbFacile_postgresql.php';
 require_once '../app/SimpleOAuthLogin/UserManager.php';
 require_once '../app/Backle.php';
 

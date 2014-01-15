@@ -118,7 +118,7 @@ CREATE TABLE `user` (
   `displayname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `origin` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `external_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `image_url` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` datetime NOT NULL,
   `last_login` timestamp NULL DEFAULT NULL,
