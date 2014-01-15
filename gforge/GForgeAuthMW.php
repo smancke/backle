@@ -4,9 +4,12 @@ class GForgeAuthMW extends \Slim\Middleware
 {
     protected $cfg;
     protected $userMgr;
+    protected $gforge;
 
     function __construct($cfg) {
         $this->cfg = $cfg;
+        include "GForgeApiFake.php";
+        $this->gforge = new GForgeApiFake();
     }
     
     public function call()
@@ -16,7 +19,7 @@ class GForgeAuthMW extends \Slim\Middleware
         $this->userMgr = new UserManager($app->db); 
         $app->userMgr = $this->userMgr;
 
-        $gforgeUserInfo = $this->getGForgeUserInfo();
+        $gforgeUserInfo = $this->gforge->getGForgeUserInfo();
         if ($gforgeUserInfo) {
             // create user, unless it exists
             $app->userMgr->setAndCreateUserIfNotExists('gforge', 
@@ -41,7 +44,7 @@ class GForgeAuthMW extends \Slim\Middleware
         // ensure, that a gforge project is also available within backle
         // TODO: handle updates of the project
         if (! $projectInfo) {            
-            $gforgeProjectInfo = $this->getGForgeProjectInformation($projectName);
+            $gforgeProjectInfo = $this->gforge->getGForgeProjectInformation($projectName);
             if ($gforgeProjectInfo) {
                 
                 $projectId = $this->userMgr->createProject($projectName, 
@@ -59,27 +62,8 @@ class GForgeAuthMW extends \Slim\Middleware
         if ($this->app->userInfo) {
 
             // update project rights on demand
-            $gforgeProjectRights = $this->getGForgeProjectRights($projectName, $this->app->userInfo['external_id']);
+            $gforgeProjectRights = $this->gforge->getGForgeProjectRights($projectName);
             $this->userMgr->setUserProjectRights($projectInfo['id'], $this->app->userInfo['id'], $gforgeProjectRights);
         }
-    }
-
-    function getGForgeUserInfo() {
-        return ['displayname' => 'Mann Fred',
-                'username' => 'mfred',
-                'email' => 'mfred@example.org',
-                'image_url' => 'http://example.org/mfredImage'];
-    }
-
-    function getGForgeProjectInformation($projectname) {
-        return ['name' => 'demoProjectPublic',
-                'title' => 'GForge Demo Project',
-                'is_public_viewable' => 1];
-    }
-
-    function getGForgeProjectRights($projectname, $username) {
-        return ['can_read' => 0,
-                'is_owner' => 1,
-                'can_write' => 0];
     }
 }
