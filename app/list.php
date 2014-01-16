@@ -8,7 +8,7 @@ $app->backle->writePageHeader();
 ?>
 
     <!-- content -->
-    <br>
+    <br/>
     <div ng-controller="ListCtrl">
 
       <div class="{{alertType}}"  ng-bind-html="alertHtmlMessage"></div>
@@ -25,7 +25,7 @@ $app->backle->writePageHeader();
           </div>
           <div class="col-md-2">
             <div class="input-group pull-right">
-              <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
+              <input type="text" class="form-control" placeholder="Search" ng-model="searchText"/>
               <div class="input-group-btn">
                 <button class="btn btn-default" ng-click="searchText = ''" ng-disabled="! searchText" type="submit"><i class="glyphicon glyphicon-remove"></i></button>
               </div>
@@ -33,7 +33,7 @@ $app->backle->writePageHeader();
             <!-- <span class="badge pull-right" style="min-height:18px; min-width:36px; margin-right: 40px">{{totalStoryPoints}}</span> -->
           </div>  
         </div>
-        <br>
+        <br/>
         <div class="row">
           <div class="col-md-7 col-md-offset-1" id="item-list">
 
@@ -73,6 +73,8 @@ $app->backle->writePageHeader();
         </div>
       </div>
     </div>
-     <br>
-  </body>
-</html>
+     <br/>
+
+<?php
+$app->backle->writePageFooter();
+?>

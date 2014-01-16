@@ -25,7 +25,7 @@ class ViewProvider {
 
         // include stylesheeds
         echo "    <link rel=\"stylesheet\" href=\"". cfg_basepath() ."/app/backle.css\" type=\"text/css\"/>\n";
-        echo "    <link href=\"" . cfg_basepath() . "/app/lib/bootstrap.css\" rel=\"stylesheet\" media=\"screen\">\n";
+        echo "    <link href=\"" . cfg_basepath() . "/app/lib/bootstrap.css\" rel=\"stylesheet\" media=\"screen\"/>\n";
 
         // do javascript includes
         $jsIncludeFiles = array_merge($this->getCommonJsIncludeFiles(), $jsIncludeFiles);
@@ -34,7 +34,6 @@ class ViewProvider {
         }
 
         // set some javascript variables
-        // TODO: this logic should come from somewhere else
         echo "    <script>\n";
         $projectName = $this->app->backle->getProjectName();
         $backlogName = $this->app->backle->getBacklogName();
@@ -56,6 +55,11 @@ class ViewProvider {
 
     function writePageHeader() {
         include('header.php');
+    }
+
+    function writePageFooter() {
+    	echo "    </body>\n";
+    	echo "</html>\n";
     }
 
 }

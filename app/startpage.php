@@ -7,7 +7,7 @@ $app->backle->writePageHeader();
 
 ?>
 
-    <br>
+    <br/>
     <div class="row" ng-controller="IndexCtrl">
       <div class="col-md-7 col-md-offset-1" id="item-list">
         
@@ -19,16 +19,18 @@ $app->backle->writePageHeader();
         You can create your own backlog in a few seconds.
         
         <a href="<?=cfg_basepath()?>/c/create"><span class="glyphicon glyphicon-arrow-right"></span> create a project</a>
-        <br>
+        <br/>
 
         <h3>search for backlogs:</h3>
             <div class="input-group pull-right">
-              <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
+              <input type="text" class="form-control" placeholder="Search" ng-model="searchText"/>
               <div class="input-group-btn">
                 <button class="btn btn-default" ng-click="searchText = ''" ng-disabled="! searchText" type="submit"><i class="glyphicon glyphicon-remove"></i></button>
               </div>
             </div>
       </div>
+    </div>
 
-  </body>
-</html>
+<?php
+$app->backle->writePageFooter();
+?>

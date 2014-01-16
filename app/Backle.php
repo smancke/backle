@@ -33,6 +33,9 @@ class Backle {
         $this->viewProvider->writePageHeader();
     }
 
+    function writePageFooter() {
+        $this->viewProvider->writePageFooter();
+    }
 
     function setProjectName($projectName) {
         $this->projectName = $projectName;
