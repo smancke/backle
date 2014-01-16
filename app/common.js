@@ -1,7 +1,7 @@
 
 backle.directive('contenteditable', function() {
     // fix for correct blur on webkit based browser
-    var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
+    var editableFix = jquery('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
 
     return {
         require: 'ngModel',

@@ -21,12 +21,6 @@ class GForgeViewProvider extends ViewProvider {
     //        echo "<h1>gforge header: ". $this->app->backle->getProjectName() ."</h1>";
 
 
-
-
-        // include stylesheeds
-//        echo "    <link rel=\"stylesheet\" href=\"". cfg_basepath() ."/app/backle.css\" type=\"text/css\"/>\n";
-//        echo "    <link href=\"" . cfg_basepath() . "/app/lib/bootstrap.css\" rel=\"stylesheet\" media=\"screen\"/>\n";
-
         // do javascript includes
         $jsIncludeFiles = array_merge($this->getCommonJsIncludeFiles(), $jsIncludeFiles);
         foreach ($jsIncludeFiles as $jsIncludeFile) {
@@ -35,7 +29,11 @@ class GForgeViewProvider extends ViewProvider {
 
         // set some javascript variables
         echo "    <script>\n";
-	echo " $.noConflict();";
+	echo "         jquery = $.noConflict();\n";
+	echo "         jquery('html').attr('ng-app', 'backle');\n";
+        // include stylesheeds
+ 	echo "        jquery('head').append('<link rel=\"stylesheet\" href=\"". cfg_basepath() ."/app/backle.css\" type=\"text/css\"/>');\n";
+        echo "        jquery('head').append('<link href=\"" . cfg_basepath() . "/app/lib/bootstrap.css\" rel=\"stylesheet\" media=\"screen\"/>')\n";
         $projectName = $this->app->backle->getProjectName();
         $backlogName = $this->app->backle->getBacklogName();
         $storyId = $this->app->backle->getStoryId();

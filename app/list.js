@@ -116,7 +116,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             } 
             $scope.backlogItems.splice(toPosition, 0, newItem);
             window.setTimeout(function() {
-                element = $('#item-title-'+newItem.id);
+                element = jquery('#item-title-'+newItem.id);
                 element.focus();                
             }, 1);
         });        
@@ -139,7 +139,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
 
     $scope.focus = function(event) {
         window.setTimeout(function() {
-            var span = $(event.target); 
+            var span = jquery(event.target); 
 
             // the main element,
             // so we select the title child element
@@ -202,14 +202,14 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     }, true)
 
     $scope.getStoryIdByElement = function(storyWidget) {
-        var id = $(storyWidget).attr('id');
+        var id = jquery(storyWidget).attr('id');
         id = id.replace(/item-title-/, '');
         id = id.replace(/item-/, '');
         return id;
     }
 
     if ($scope.permissions.write) {
-        $( "#item-list" ).sortable({ 
+        jquery( "#item-list" ).sortable({ 
             helper: 'clone',
             axis: 'y',  
             cursor: "move",
