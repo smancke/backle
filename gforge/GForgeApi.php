@@ -4,7 +4,7 @@ class GForgeApi {
 
     public function getGForgeUserInfo() {
         if (! session_loggedin()) 
-            return nil;
+            return Null;
         
         $user = session_get_user();
         return ['displayname' => $user->getRealName(),
