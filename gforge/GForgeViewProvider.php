@@ -1,17 +1,21 @@
 <?php
 
+
 class GForgeViewProvider extends ViewProvider {
 
     function __construct($app) {
         parent::__construct($app);
     }
 
+    function getCommonJsIncludeFiles() {
+        return ["/app/lib/jquery.min.js",
+                "/app/lib/ui/jquery-ui.js", 
+                "/app/lib/angular.min.js",
+                "/app/lib/angular-resource.min.js"];
+    }
+
+
     function writeHead($pageName, $jsIncludeFiles) {
-
-     	// disable gforge html syntax checks
-	global $sysdebug_xmlstarlet;
-        $sysdebug_xmlstarlet = false;
-
 
         $group = group_get_object_by_name($this->app->backle->getProjectName());
 	//$group->getID()
@@ -29,11 +33,9 @@ class GForgeViewProvider extends ViewProvider {
 
         // set some javascript variables
         echo "    <script>\n";
-	echo "         jquery = $.noConflict();\n";
-	echo "         jquery('html').attr('ng-app', 'backle');\n";
+	echo "         $('html').attr('ng-app', 'backle');\n";
         // include stylesheeds
- 	echo "        jquery('head').append('<link rel=\"stylesheet\" href=\"". cfg_basepath() ."/app/backle.css\" type=\"text/css\"/>');\n";
-        echo "        jquery('head').append('<link href=\"" . cfg_basepath() . "/app/lib/bootstrap.css\" rel=\"stylesheet\" media=\"screen\"/>')\n";
+ 	echo "        $('head').append('<link rel=\"stylesheet\" href=\"". cfg_basepath() ."/app/backle.css\" type=\"text/css\"/>');\n";
         $projectName = $this->app->backle->getProjectName();
         $backlogName = $this->app->backle->getBacklogName();
         $storyId = $this->app->backle->getStoryId();

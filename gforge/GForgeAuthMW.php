@@ -1,9 +1,10 @@
 <?php
 
-require_once ('../../../www/env.inc.php');
-require_once $gfcommon.'include/ProjectManager.class.php';
+require_once ('/usr/share/gforge/www/env.inc.php');
 require_once $gfcommon.'include/pre.php';
-	     
+sysdebug_off();	     
+
+require_once "GForgeApi.php";
 
 class GForgeAuthMW extends \Slim\Middleware
 {
@@ -15,7 +16,6 @@ class GForgeAuthMW extends \Slim\Middleware
         $this->cfg = $cfg;
         //require_once "GForgeApiFake.php";
         //$this->gforge = new GForgeApiFake();
-        require_once "GForgeApi.php";
         $this->gforge = new GForgeApi();
     }
     
@@ -37,9 +37,10 @@ class GForgeAuthMW extends \Slim\Middleware
 
             $app->userInfo = $app->userMgr->getUserInfo();
 
-            // seht the current user id for the backlog api
+            // set the current user id for the backlog api
             $app->backlog->setUserId($app->userInfo['id']);
         }
+	error_log('app->backlog->getUserId(): '. $app->backlog->getUserId());
         
         // Run inner middleware and application
         $this->next->call();

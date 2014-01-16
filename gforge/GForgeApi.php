@@ -1,5 +1,7 @@
 <?php
 
+//require_once $gfcommon.'include/ProjectManager.class.php';
+
 class GForgeApi {
 
     public function getGForgeUserInfo() {

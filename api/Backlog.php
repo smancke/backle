@@ -16,6 +16,10 @@ class Backlog {
     public function setUserId($userId) {
         $this->userId = $userId;
     }
+
+    public function getUserId() {
+        return $this->userId;
+    }
     
     public function createBacklog($backlogName, $backlogtitle, $isPublicViewable, $projectId, $isProjectDefault=false) {
         $insData = ['backlogname' => $backlogName,
@@ -170,6 +174,7 @@ EOT;
      */
     public function getRights($projectname) {
         $userRights = Null;
+
         if ($this->userId && $this->getProjectId($projectname) ) {
             $userRights = $this->db->fetchRow("SELECT '1' as \"read\", is_owner as owner, can_write as \"write\" FROM user_project WHERE user_id = ? AND project_id = ?", 
                                               [$this->userId, $this->getProjectId($projectname)]);
@@ -180,9 +185,11 @@ EOT;
                            'owner' => 0,
                            'write' => 0];
         }
+
         if (!$userRights['read']) {
             $userRights['read'] = $this->db->fetchCell('SELECT is_public_viewable from project WHERE name = ?', [$projectname]);
         }
+
         return $userRights;
     }
 
