@@ -1,9 +1,9 @@
 Template: backle/setup-username
 Type: string
 Default: admin
-_Description: Username for the backle database.
+Description: Username for the backle database.
 
 Template: backle/setup-password
 Type: password
 Default:
-_Description: Password for for the backle database.
+Description: Password for for the backle database.

@@ -37,9 +37,10 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 	if [ -f /usr/share/debconf/confmodule ]; then
 		db_version 2.0
 
-		db_get backle/reconfigure-webserver
-
-		webservers="$RET"
+#Don't think we need this, seems to be for choosing the http server
+#		db_get backle/reconfigure-webserver
+#
+#		webservers="$RET"
 
 
 		apache_remove $1
