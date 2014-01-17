@@ -1,3 +1,8 @@
+build-stamp
+debian/backle.postrm.debhelper
+debian/backle.substvars
+debian/backle/
+debian/files
 
 config.php
 config_postgresql.php

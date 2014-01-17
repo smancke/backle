@@ -1,9 +1,3 @@
-# If modifications/additions/rewording are needed, please ask
-# debian-l10n-english@lists.debian.org for advice.
-#
-# Even minor modifications require translation updates and such
-# changes should be coordinated with translators and reviewers.
-
 Template: backle/setup-username
 Type: string
 Default: admin

@@ -63,7 +63,7 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 #				fi
 #			fi
 #		done
-#	fi
+	fi
 
 	if [ "$1" = "purge" ]; then
 	    rm -rf /etc/phpmyadmin /var/lib/phpmyadmin

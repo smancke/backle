@@ -61,7 +61,7 @@ if [ "$1" = "configure" ]; then
 #            fi
 #        fi
 #	done
-#fi
+fi
 
 
 #DEBHELPER#

@@ -38,7 +38,8 @@ install: build
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs ChangeLog
+# TODO 
+#	dh_installchangelogs ChangeLog
 	dh_installdocs
 	dh_installexamples
 	dh_installdebconf	
