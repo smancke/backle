@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ -f /usr/share/dbconfig-common/dpkg/config.pgsql ]; then
+        . /usr/share/dbconfig-common/dpkg/config.pgsql
+        if ! dbc_go backle $@ ; then
+            echo 'Automatic configuration using dbconfig-common failed!'
+        fi
+fi
+
+#TODO:
+db_version 2.0
+
+#Don't think we need this, seems to be for choosing the http server
+#db_input high backle/reconfigure-webserver || true
+
+#if [ ! -f /etc/phpmyadmin/htpasswd.setup ]; then
+	db_input low backle/setup-username || true
+	db_input low backle/setup-password || true
+#fi
+
+db_go || true
+

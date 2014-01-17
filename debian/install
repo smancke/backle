@@ -1,0 +1,11 @@
+index.php	usr/share/backle/www
+
+api		usr/share/backle/www
+app		usr/share/backle/www
+gforge          usr/share/backle/www
+lib		usr/share/backle/www
+
+debian/conf/*	etc/backle
+config.php	etc/backle
+
+scripts/psql_schema.sql  usr/share/dbconfig-common/data/backle/install/pgsql

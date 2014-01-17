@@ -1,0 +1,78 @@
+#!/bin/sh
+# postrm script for backle
+
+set -e
+
+apache_remove() {
+        COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
+
+        if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+                . /usr/share/apache2/apache2-maintscript-helper
+                apache2_invoke disconf backle
+        elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
+                rm -f /etc/apache2/conf.d/backle.conf
+        fi
+
+	rm -f /etc/$webserver/conf-available/backle.conf
+}
+if [ -f /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+fi
+if [ -f /usr/share/dbconfig-common/dpkg/postrm.pgadmin ]; then
+    . /usr/share/dbconfig-common/dpkg/postrm.pgadmin
+    if ! dbc_go backle $@ ; then
+        echo 'Automatic configuration using dbconfig-common failed!'
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+    rm -f /etc/backle/config-db.php
+    if which ucf >/dev/null 2>&1; then
+	ucf --debconf-ok --purge /etc/backle/config-db.php
+    fi
+fi
+
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+
+	if [ -f /usr/share/debconf/confmodule ]; then
+		db_version 2.0
+
+		db_get backle/reconfigure-webserver
+
+		webservers="$RET"
+
+
+		apache_remove $1
+		/etc/init.d/apache2 reload 3>/dev/null || true
+
+#Don't think we need this, seems to be for choosing the http server
+#		for webserver in $webservers; do
+#			webserver=${webserver%,}
+#			if [ "$webserver" = "lighttpd" ] ; then
+#				lighttpd_remove
+#			else
+#				apache_remove $1
+#			fi
+#			# Redirection of 3 is needed because Debconf uses it and it might 
+#			# be inherited by webserver. See bug #446324.
+#			if [ -f /etc/init.d/$webserver ] ; then
+#				if [ -x /usr/sbin/invoke-rc.d ]; then
+#					invoke-rc.d $webserver reload 3>/dev/null || true
+#				else
+#					/etc/init.d/$webserver reload 3>/dev/null || true
+#				fi
+#			fi
+#		done
+#	fi
+
+	if [ "$1" = "purge" ]; then
+	    rm -rf /etc/phpmyadmin /var/lib/phpmyadmin
+	fi
+fi
+
+
+#DEBHELPER#
+
+exit 0
+
+

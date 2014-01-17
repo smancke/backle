@@ -1,0 +1,15 @@
+# If modifications/additions/rewording are needed, please ask
+# debian-l10n-english@lists.debian.org for advice.
+#
+# Even minor modifications require translation updates and such
+# changes should be coordinated with translators and reviewers.
+
+Template: backle/setup-username
+Type: string
+Default: admin
+_Description: Username for the backle database.
+
+Template: backle/setup-password
+Type: password
+Default:
+_Description: Password for for the backle database.
