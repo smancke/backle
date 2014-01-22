@@ -6,6 +6,5 @@ gforge          usr/share/backle/www
 lib		usr/share/backle/www
 
 debian/conf/*	etc/backle
-config.php	etc/backle
 
 scripts/sql/install/pgsql  usr/share/dbconfig-common/data/backle/install/

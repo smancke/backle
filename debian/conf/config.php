@@ -5,11 +5,12 @@ require_once "/etc/backle/config-db.php";
 $cfg['basepath'] = '/backle';
 
 $cfg['dbtype'] = 'postgresql';
-$cfg['dbhost'] = $dbserver;
-$cfg['dbuser'] = $dbuser';
+$cfg['dbhost'] = ($dbserver) ? $dbserver : 'localhost';
+$cfg['dbuser'] = $dbuser;
 $cfg['dbpassword'] = $dbpass;
 $cfg['dbname'] = $dbname;
 $cfg['dbschema'] = $basepath; // relevant for postgres, only
+$cfg['dblogfile'] = Null;
 
 $cfg['demo_login_enabled'] = false;
 $cfg['demo_login_password'] = 'secret';
