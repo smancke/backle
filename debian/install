@@ -8,4 +8,4 @@ lib		usr/share/backle/www
 debian/conf/*	etc/backle
 config.php	etc/backle
 
-scripts/psql_schema.sql  usr/share/dbconfig-common/data/backle/install/pgsql
+scripts/sql/install/pgsql  usr/share/dbconfig-common/data/backle/install/
