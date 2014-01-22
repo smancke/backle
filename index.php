@@ -1,6 +1,12 @@
 <?php
 date_default_timezone_set("Europe/Berlin");
 
+if (file_exists('./config.php')) {
+    require_once './config.php';
+} else {
+    require_once '/etc/backle/config.php';
+}
+
 require_once 'app/SimpleOAuthLogin/GoogleLoginProvider.php';
 require_once 'app/SimpleOAuthLogin/LoginHandler.php';
 require_once 'app/SimpleOAuthLogin/UserManager.php';
@@ -8,7 +14,6 @@ require_once 'api/Backlog.php';
 require_once 'lib/dbFacile/dbFacile_mysql.php';
 require_once 'lib/dbFacile/dbFacile_postgresql.php';
 require_once 'lib/Slim/Slim.php';
-require_once './config.php';
 require_once 'app/Backle.php';
 
 \Slim\Slim::registerAutoloader();

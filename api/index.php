@@ -1,9 +1,14 @@
 <?php
 
+if (file_exists('../config.php')) {
+    require_once '../config.php';
+} else {
+    require_once '/etc/backle/config.php';
+}
+
 date_default_timezone_set("Europe/Berlin");
 require_once 'Backlog.php';
 require_once '../lib/Slim/Slim.php';
-require_once '../config.php';
 require_once 'helper.php';
 require_once '../lib/dbFacile/dbFacile_mysql.php';
 require_once '../lib/dbFacile/dbFacile_postgresql.php';
