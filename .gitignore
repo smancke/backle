@@ -4,6 +4,6 @@ debian/backle.substvars
 debian/backle/
 debian/files
 
-config.php
-config_postgresql.php
-config_mysql.php
+/config.php
+/config_postgresql.php
+/config_mysql.php
