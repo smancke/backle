@@ -14,6 +14,8 @@ apache_install() {
 		apache2_invoke enconf backle
 
        fi
+
+        a2enmod rewrite
 #TODO:
 #	elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
 #		[ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/backle.conf ] && ln -s ../conf-available/backle.conf /etc/apache2/conf.d/backle.conf

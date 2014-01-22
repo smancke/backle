@@ -1,4 +1,5 @@
 build-stamp
+debian/backle.debhelper.log
 debian/backle.postrm.debhelper
 debian/backle.substvars
 debian/backle/

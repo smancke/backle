@@ -26,13 +26,8 @@ install: build
 	dh_install
 	# spurious licence files, this is in debian/copyright
 # TODO: Should we rm anything here?
-#	rm \
-#		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*/LICENSE \
-#		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
-#		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
-#		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
-#	rmdir debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*
-	# include Debian marker in version string
+	rm \
+		debian/backle/usr/share/backle/www/api/.htaccess
 
 # Build architecture-independent files here.
 binary-indep: build install
