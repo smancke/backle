@@ -14,13 +14,8 @@ fi
 #TODO:
 db_version 2.0
 
-#Don't think we need this, seems to be for choosing the http server
-#db_input high backle/reconfigure-webserver || true
-
-#if [ ! -f /etc/phpmyadmin/htpasswd.setup ]; then
-	db_input low backle/setup-username || true
-	db_input low backle/setup-password || true
-#fi
+db_input low backle/setup-username || true
+db_input low backle/setup-password || true
 
 db_go || true
 

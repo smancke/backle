@@ -12,14 +12,11 @@ apache_install() {
 	if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
 		. /usr/share/apache2/apache2-maintscript-helper
 		apache2_invoke enconf backle
-
-       fi
+	elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
+		[ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/backle.conf ] && ln -s ../conf-available/backle.conf /etc/apache2/conf.d/backle.conf
+	fi
 
         a2enmod rewrite
-#TODO:
-#	elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
-#		[ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/backle.conf ] && ln -s ../conf-available/backle.conf /etc/apache2/conf.d/backle.conf
-#	fi
 }
 
 . /usr/share/debconf/confmodule
@@ -38,32 +35,6 @@ if [ "$1" = "configure" ]; then
 
 	apache_install $1
         /etc/init.d/apache2 reload 3>/dev/null || true
-
-#Don't think we need this, seems to be for choosing the http server
-#
-#	# Configure Apache
-#	db_get backle/reconfigure-webserver
-#
-#	webservers="$RET"
-#
-#	for webserver in $webservers; do
-#		webserver=${webserver%,}
-#		if [ "$webserver" = "lighttpd" ] ; then
-#			lighttpd_install
-#		else
-#			apache_install $1
-#		fi
-#		# Reload webserver in any case, configuration might have changed
-#		# Redirection of 3 is needed because Debconf uses it and it might 
-#		# be inherited by webserver. See bug #446324.
-#        if [ -f /etc/init.d/$webserver ] ; then
-#            if [ -x /usr/sbin/invoke-rc.d ]; then
-#                invoke-rc.d $webserver reload 3>/dev/null || true
-#            else
-#                /etc/init.d/$webserver reload 3>/dev/null || true
-#            fi
-#        fi
-#	done
 fi
 
 
