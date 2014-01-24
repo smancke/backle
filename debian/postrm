@@ -13,7 +13,7 @@ apache_remove() {
                 rm -f /etc/apache2/conf.d/backle.conf
         fi
 
-	rm -f /etc/$webserver/conf-available/backle.conf
+	rm -f /etc/apache2/conf-available/backle.conf
 }
 if [ -f /usr/share/debconf/confmodule ]; then
     . /usr/share/debconf/confmodule
@@ -37,37 +37,9 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 	if [ -f /usr/share/debconf/confmodule ]; then
 		db_version 2.0
 
-#Don't think we need this, seems to be for choosing the http server
-#		db_get backle/reconfigure-webserver
-#
-#		webservers="$RET"
-
-
 		apache_remove $1
 		/etc/init.d/apache2 reload 3>/dev/null || true
 
-#Don't think we need this, seems to be for choosing the http server
-#		for webserver in $webservers; do
-#			webserver=${webserver%,}
-#			if [ "$webserver" = "lighttpd" ] ; then
-#				lighttpd_remove
-#			else
-#				apache_remove $1
-#			fi
-#			# Redirection of 3 is needed because Debconf uses it and it might 
-#			# be inherited by webserver. See bug #446324.
-#			if [ -f /etc/init.d/$webserver ] ; then
-#				if [ -x /usr/sbin/invoke-rc.d ]; then
-#					invoke-rc.d $webserver reload 3>/dev/null || true
-#				else
-#					/etc/init.d/$webserver reload 3>/dev/null || true
-#				fi
-#			fi
-#		done
-	fi
-
-	if [ "$1" = "purge" ]; then
-	    rm -rf /etc/phpmyadmin /var/lib/phpmyadmin
 	fi
 fi
 
