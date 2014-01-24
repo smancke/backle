@@ -8,17 +8,16 @@ $app->backle->writePageHeader();
 ?>
 
   <div ng-controller="DetailCtrl">
-    <div class="row">
-      <div class="col-md-5 col-md-offset-1">
+      <br>
+    <div class="container">
+      <div class="">
         <a href="<?=cfg_basepath()?>/<?=$projectname?>"
            class="btn btn-default btn-lg">
-          <span class="glyphicon glyphicon-chevron-left"></span> <?=$projectname?>
+          <span class="glyphicon glyphicon-chevron-left"></span> liste
         </a>
       </div>
-    </div>
-    <br>
-     <div class="container">
-       <div class="panel panel-success">
+      <br>
+        <div class="panel panel-default">
          <div class="panel-heading">
            <h3 id="headline"><div  style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
                                   contentEditable="{{permissions.write == 1}}"
