@@ -35,7 +35,7 @@ $app->backle->writePageHeader();
         </div>
         <br/>
         <div class="row">
-          <div class="col-md-7 col-md-offset-1" id="item-list">
+          <div class="col-md-10 col-md-offset-1" id="item-list">
 
             <div id="item-{{backlogItem.id}}" 
                  class="backlog-list-item {{backlogItem.type}}" 
