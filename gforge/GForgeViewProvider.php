@@ -18,12 +18,8 @@ class GForgeViewProvider extends ViewProvider {
     function writeHead($pageName, $jsIncludeFiles) {
 
         $group = group_get_object_by_name($this->app->backle->getProjectName());
-	//$group->getID()
-	site_project_header(array('title'=>'backle', 'h1' => '', 'group'=>23, 'toptab' => 'home',
+        site_project_header(array('title'=>'Backle - agile backlog', 'h1' => '', 'group'=>$group->getID(), 'toptab' => 'backle',
                 'submenu' => ''));
-
-    //        echo "<h1>gforge header: ". $this->app->backle->getProjectName() ."</h1>";
-
 
         // do javascript includes
         $jsIncludeFiles = array_merge($this->getCommonJsIncludeFiles(), $jsIncludeFiles);
