@@ -12,8 +12,8 @@ build-indep:
 clean:
 	dh_testdir
 	# check for submodule existence
-	test -f app/SimpleOAuthLogin/.git
-	test -f app/lib/ckeditor/.git
+	test -f app/SimpleOAuthLogin/README.md
+	test -f app/lib/ckeditor/README.md
 	dh_testroot
 	dh_clean
 
