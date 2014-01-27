@@ -11,6 +11,9 @@ build-indep:
 
 clean:
 	dh_testdir
+	# check for submodule existence
+	test -f app/SimpleOAuthLogin/.git
+	test -f app/lib/ckeditor/.git
 	dh_testroot
 	dh_clean
 
@@ -26,6 +29,12 @@ binary-indep:
 	dh_installdebconf
 	dh_installman
 	rm \
+		debian/backle/usr/share/backle/www/app/SimpleOAuthLogin/LICENSE \
+		debian/backle/usr/share/backle/www/app/lib/angular-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/bootstrap-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/ckeditor/LICENSE.md \
+		debian/backle/usr/share/backle/www/app/lib/jquery-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/jquery-ui-LICENSE.txt \
 		debian/backle/usr/share/backle/www/lib/Slim/LICENSE \
 		debian/backle/usr/share/backle/www/lib/dbFacile/LICENSE.txt \
 		debian/backle/usr/share/backle/www/api/.htaccess

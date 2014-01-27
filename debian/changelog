@@ -4,6 +4,6 @@ backle (0~20140127) tarent; urgency=low
   * First release.
 
   [ Thorsten Glaser ]
-  * Tweak packaging
+  * Tweak packaging; more tbd later
 
- -- Thorsten Glaser <t.glaser@tarent.de>  Mon, 27 Jan 2014 11:20:33 +0100
+ -- Thorsten Glaser <t.glaser@tarent.de>  Mon, 27 Jan 2014 13:12:36 +0100
