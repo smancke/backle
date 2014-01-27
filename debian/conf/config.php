@@ -25,5 +25,3 @@ function cfg_basepath() {
     global $cfg;
     return $cfg['basepath'];
 }
-
-?>
