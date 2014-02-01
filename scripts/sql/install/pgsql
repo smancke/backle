@@ -71,7 +71,7 @@ CREATE TABLE item (
   status item_status NOT NULL DEFAULT 'open',
   backlogorder int NOT NULL,
   title varchar(400) DEFAULT NULL,
-  text varchar(400) DEFAULT NULL,
+  text varchar(800) DEFAULT NULL,
   detail text,
   points int DEFAULT NULL,
   created timestamp NOT NULL,

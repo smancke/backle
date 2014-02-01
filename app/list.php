@@ -48,7 +48,8 @@ $app->backle->writePageHeader();
                       class="backlog-item-title"
                       contentEditable="{{permissions.write == 1}}"
                       ng-model="backlogItem.title" 
-                      ng-keypress="itemTitleKeyPressed($event)"></div>
+                      ng-keypress="itemTitleKeyPressed($event)"
+                      maxlength="400"></div>
                 
                 <a class="backlog-btn" href="#" style="cursor: default;" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
                   <div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>

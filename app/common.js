@@ -6,6 +6,8 @@ backle.directive('contenteditable', function() {
     return {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
+            
+            var maxlength = attrs.maxlength;
 
             var placeholderText = attrs.placeholder;
             if (placeholderText == undefined) {
@@ -41,6 +43,15 @@ backle.directive('contenteditable', function() {
                     elm.removeClass("placeholder");
                 }
             };
+
+            /**
+             * handling the maxlength parameter
+             */
+            elm.on('keypress', function(event) {
+                if (event.charCode == 0) // Enter, Del, Arrow-Key, etc.
+                    return true;                    
+                return elm.text().length < maxlength;
+            });
             
             elm.on('keydown', function(event) {
                 if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
