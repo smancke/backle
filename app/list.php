@@ -57,7 +57,7 @@ $app->backle->writePageHeader();
                           placeholder="  "></span>
                   </span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
-                    <a class="backlog-btn" href="#" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">
+                    <a class="backlog-btn" href="" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">
                       <div class="glyphicon glyphicon-trash"></div></a>
                   </div>
                 </span>
@@ -71,7 +71,7 @@ $app->backle->writePageHeader();
                        ng-keypress="itemTitleKeyPressed($event)"
                        maxlength="400"></div>
                   
-                  <a class="backlog-btn" href="#" style="cursor: default; padding: 5px" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1"><div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
+                  <a class="backlog-btn" href="" style="cursor: default; padding: 5px" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1"><div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
               </span>              
               </div>
             </div>
