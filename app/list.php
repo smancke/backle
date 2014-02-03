@@ -15,16 +15,16 @@ $app->backle->writePageHeader();
      
       <div ng-show="backlogPresent">
         <div class="row">
-          <div class="col-md-5 col-md-offset-1">
-            <button ng-show="permissions.write" ng-click="addItem()" type="button" class="btn  btn-default btn-lg">
+          <div class="col-md-7 col-md-offset-1">
+            <button ng-show="permissions.write" ng-click="addItem()" type="button" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon-plus"></span> Story
             </button>
-            <button ng-show="permissions.write" ng-click="addSprint()" type="button" class="btn  btn-default btn-lg">
+            <button ng-show="permissions.write" ng-click="addSprint()" type="button" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon-plus"></span> Sprint
             </button>
           </div>
-          <div class="col-md-2">
-            <div class="input-group pull-right">
+          <div class="col-md-3">
+            <div class="input-group input-group-sm pull-right">
               <input type="text" class="form-control" placeholder="Search" ng-model="searchText"/>
               <div class="input-group-btn">
                 <button class="btn btn-default" ng-click="searchText = ''" ng-disabled="! searchText" type="submit"><i class="glyphicon glyphicon-remove"></i></button>
@@ -54,7 +54,8 @@ $app->backle->writePageHeader();
                           style="padding: 1px;" 
                           contenteditable="{{permissions.write == 1}}" 
                           ng-model="backlogItem.points"
-                          placeholder="  "></span>
+                          placeholder="  "
+                          maxlength="3"></span>
                   </span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
                     <a class="backlog-btn" href="" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">

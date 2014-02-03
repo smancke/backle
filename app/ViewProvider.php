@@ -49,7 +49,7 @@ class ViewProvider {
         echo "    </script>\n";
     
         echo "  </head>\n";
-        echo "  <body style=\"overflow-y:auto\">\n";
+        echo "  <body>\n";
     
     }
 

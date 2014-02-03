@@ -48,6 +48,9 @@ backle.directive('contenteditable', function() {
              * handling the maxlength parameter
              */
             elm.on('keypress', function(event) {
+                if (maxlength == undefined)
+                    return true;
+
                 if (event.charCode == 0) // Enter, Del, Arrow-Key, etc.
                     return true;                    
                 return elm.text().length < maxlength;

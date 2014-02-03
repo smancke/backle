@@ -12,7 +12,7 @@ $app->backle->writePageHeader();
     <div class="container">
       <div class="">
         <a href="<?=cfg_basepath()?>/<?=$projectname?>"
-           class="btn btn-default btn-lg">
+           class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-chevron-left"></span> liste
         </a>
       </div>
@@ -39,9 +39,10 @@ $app->backle->writePageHeader();
                 </div>
                 <div class="row">
                   <div class="col-xs-4"><strong>StoryPoints</strong></div>                   
-                  <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
+                  <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; padding-right: 6px"
                        contentEditable="{{permissions.write == 1}}"
-                       ng-model="story.points"></div>
+                       ng-model="story.points"
+                       maxlength="3"></div>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->
