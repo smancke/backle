@@ -42,20 +42,13 @@ $app->backle->writePageHeader();
                  ng-repeat="backlogItem in backlogItems | filter: searchText" 
                  ng-click="focus($event)">
               
+              <!-- left detail link --> 
               <div class="detail-link"><a href="<?=cfg_basepath()?>/<?=$projectname?>/{{backlogItem.id}}">#{{backlogItem.id}}</a></div>
-              <span class="milestone-block">
-                <div style="display: inline-block; min-height: 18px; min-width: 3px; margin: 0px; padding: 0px;" id="item-title-{{backlogItem.id}}"
-                      class="backlog-item-title"
-                      contentEditable="{{permissions.write == 1}}"
-                      ng-model="backlogItem.title" 
-                      ng-keypress="itemTitleKeyPressed($event)"
-                      maxlength="400"></div>
-                
-                <a class="backlog-btn" href="#" style="cursor: default;" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1" style="padding: 5px">
-                  <div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
 
-                
-                <div class="backlog-item-right">
+              <span class="milestone-block">
+
+                <!-- right buttons --> 
+                <span class="backlog-item-right">
                   <span class="badge" style="min-width:36px; min-height:18px; margin-right: 3px;" ng-click="focus($event)">
                     <span tabindex="-1" class="badge-text" 
                           style="padding: 1px;" 
@@ -67,8 +60,20 @@ $app->backle->writePageHeader();
                     <a class="backlog-btn" href="#" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">
                       <div class="glyphicon glyphicon-trash"></div></a>
                   </div>
-                </div>
+                </span>
+
+                <!-- middle text -->
+                <div class="backlog-item-block">
+                  <div id="item-title-{{backlogItem.id}}"
+                       class="backlog-item-title"
+                       contentEditable="{{permissions.write == 1}}"
+                       ng-model="backlogItem.title" 
+                       ng-keypress="itemTitleKeyPressed($event)"
+                       maxlength="400"></div>
+                  
+                  <a class="backlog-btn" href="#" style="cursor: default; padding: 5px" ng-show="permissions.write || backlogItem.status == 'done'" ng-click="permissions.write && markAsDone(backlogItem)" title="done/open" tabindex="-1"><div class="glyphicon glyphicon-ok" ng-class="{'greenOk': backlogItem.status == 'done', 'greyOk': backlogItem.status != 'done'}"></div></a>
               </span>              
+              </div>
             </div>
           </div>
         </div>
