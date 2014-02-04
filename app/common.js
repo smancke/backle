@@ -5,6 +5,19 @@ backle.filter('dbDataToJs', function() {
   };
 });
 
+backle.directive('numberonly', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {            
+            elm.on('keypress', function(event) {
+                if (event.charCode == 0) // Enter, Del, Arrow-Key, etc.
+                    return true;                    
+                return event.charCode >= 48 && event.charCode <= 57;
+            });
+        }
+    }
+});
+
 backle.directive('contenteditable', function() {
     // fix for correct blur on webkit based browser
     var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');

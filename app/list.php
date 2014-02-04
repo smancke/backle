@@ -55,7 +55,8 @@ $app->backle->writePageHeader();
                           contenteditable="{{permissions.write == 1}}" 
                           ng-model="backlogItem.points"
                           placeholder="  "
-                          maxlength="3"></span>
+                          maxlength="3"
+                          numberonly></span>
                   </span>
                   <div class="backlog-item-buttons" ng-show="permissions.write">
                     <a class="backlog-btn" href="" ng-click="deleteItem(backlogItem)" title="delete" tabindex="-1">

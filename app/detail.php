@@ -42,7 +42,8 @@ $app->backle->writePageHeader();
                   <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; padding-right: 6px"
                        contentEditable="{{permissions.write == 1}}"
                        ng-model="story.points"
-                       maxlength="3"></div>
+                       maxlength="3"
+                       numberonly></div>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->
