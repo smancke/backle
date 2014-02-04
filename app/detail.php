@@ -49,13 +49,13 @@ $app->backle->writePageHeader();
                 </div>
                 <br>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Erstellt</strong></div> <div class="col-xs-8">{{story.created}}</div>                
+                  <div class="col-xs-4"><strong>Erstellt</strong></div> <div class="col-xs-8">{{story.created | dbDataToJs | date:'medium'}}</div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Aktualisiert</strong></div> <div class="col-xs-8">{{story.changed}}</div>
+                  <div class="col-xs-4"><strong>Aktualisiert</strong></div> <div class="col-xs-8">{{story.changed | dbDataToJs | date:'medium'}}</div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Erledigt</strong></div> <div class="col-xs-8">{{story.done}}</div>
+                  <div class="col-xs-4"><strong>Erledigt</strong></div> <div class="col-xs-8">{{story.done | dbDataToJs | date:'medium'}}</div>
                 </div>
 
               </div>

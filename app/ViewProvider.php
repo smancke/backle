@@ -13,6 +13,7 @@ class ViewProvider {
                 "/app/lib/ui/jquery-ui.js", 
                 "/app/lib/bootstrap.min.js",
                 "/app/lib/angular.min.js",
+                "/app/lib/angular-locale_de-de.js",
                 "/app/lib/angular-resource.min.js"];
     }
 

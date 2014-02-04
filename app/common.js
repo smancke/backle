@@ -1,3 +1,9 @@
+backle.filter('dbDataToJs', function() {
+  return function(input) {
+      var t = String(input).split(/[- :]/);
+      return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+  };
+});
 
 backle.directive('contenteditable', function() {
     // fix for correct blur on webkit based browser
