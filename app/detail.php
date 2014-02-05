@@ -18,12 +18,12 @@ $app->backle->writePageHeader();
       <br>
         <div class="panel panel-default">
          <div class="panel-heading">
-           <h3 id="headline"><div  style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
+           <h3 id="headline"><div  style="display: block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px; overflow-wrap: break-word; word-wrap: break-word;"
                                    contentEditable="{{permissions.write == 1}}"
                                    ng-model="story.title"
                                    maxlength="400"></div></h3>
 
-           <div style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
+           <div style="display: block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px; overflow-wrap: break-word; word-wrap: break-word;"
                 contentEditable="{{permissions.write == 1}}"
                 ng-model="story.text"
                 maxlength="800"></div>
