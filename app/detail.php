@@ -6,7 +6,6 @@ $app->backle->writeHead('the agile backlog',
 $app->backle->writePageHeader();
 
 ?>
-
   <div ng-controller="DetailCtrl">
       <br>
     <div class="container">

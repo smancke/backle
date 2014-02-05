@@ -5,6 +5,7 @@ backle.directive('ckedit', function ($parse) {
     var counter = 0,
     prefix = '__ckd_';
     var resetdata;
+    var EDITOR;
 
     return {
         restrict: 'A',
@@ -19,6 +20,7 @@ backle.directive('ckedit', function ($parse) {
  
             CKEDITOR.plugins.add('newplugin', {
                 init: function (editor) {
+                    EDITOR = editor;
                     editor.addCommand('blur', {
                         modes: { wysiwyg: 1, source: 1 },
                         exec: function (editor) {
@@ -52,12 +54,16 @@ backle.directive('ckedit', function ($parse) {
                 }
             });
 
-            // the native blur-event seems to be faster
+            // the native blur-event seems to be faster, with the one from the editor, 
+            // we loose updates in case of clicking on a link
             element.on('blur', function() {
-                if (e.editor.checkDirty()) {
-                    var ckValue = e.editor.getData();
-                    setter(scope, ckValue);
-                    e.editor.resetDirty();
+                if (EDITOR.checkDirty()) {
+                    var ckValue = EDITOR.getData();
+                    scope.$apply(function () {
+                        setter(scope, ckValue);
+                    });
+                    //setter(scope, ckValue);
+                    EDITOR.resetDirty();
                 }
             });
 
