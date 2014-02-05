@@ -87,7 +87,7 @@ backle.directive('contenteditable', function() {
                     editableFix.blur();
                 }
                 else if (event.keyCode == 27) { // Esc
-                    elm.text(ctrl.$viewValue);
+                    elm.text(ctrl.$viewValue != null ? ctrl.$viewValue : '');
                     event.target.blur();
                 }
             });
