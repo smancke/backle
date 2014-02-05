@@ -141,15 +141,9 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
         window.setTimeout(function() {
             var span = $(event.target); 
 
-            // the main element,
-            // so we select the title child element
-            if (span.hasClass("backlog-list-item")) {
-                span = span.find(".backlog-item-title")[0];
-                span.focus();
-            } 
             // the points badge was clicked,
             // so we select the text within this
-            else if (span.hasClass("badge")) {
+            if (span.hasClass("badge")) {
                 span = span.find('span').first();
                 span.focus();
                 span.selectText();
@@ -158,10 +152,13 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             // so we select the text within this
             else if (span.hasClass("badge-text")) {
                 span.selectText();
-            } 
-            // 
-            // else ... on any other subelement, we do nothing!
-        });
+            } else {
+                // the main element,
+                // so we select the title child element
+                span = span.find(".backlog-item-title")[0];
+                span.focus();
+            }
+        },1);
     };
 
     $scope.itemTitleKeyPressed = function(event) {
@@ -209,11 +206,13 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     }
 
     if ($scope.permissions.write) {
+        var previousElement;
         $( "#item-list" ).sortable({ 
             helper: 'clone',
             axis: 'y',  
             cursor: "move",
-            stop: function(event, ui) {
+            cancel: '.backlog-item-title', //enable direct clicking in the text
+            update: function(event, ui) {
                 var movingId = $scope.getStoryIdByElement(ui.item);
                 var previousId = 'begin';
                 if (ui.item.prev().attr('id')) {
@@ -222,7 +221,16 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
                 $scope.$apply(function() {
                     $scope.moveStoryBefore(movingId, previousId);
                 });
-            }
+            },
+            activate: function(event, ui) {
+                previousElement = ui.item.prev().attr('id');
+            },
+            deactivate: function(event, ui) {
+                if (previousElement == ui.item.prev().attr('id')) {
+                    var focusChild = ui.item.find(".backlog-item-title")[0];
+                    focusChild.focus();
+                }
+            },
         });
     }
 
