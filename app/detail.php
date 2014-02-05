@@ -65,5 +65,6 @@ $app->backle->writePageHeader();
      </div>
   </div>
      
-  </body>
-</html>
+<?php
+$app->backle->writePageFooter();
+?>
