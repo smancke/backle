@@ -27,7 +27,7 @@ backle.directive('ckedit', function ($parse) {
                     });
                     
                     editor.ui.addButton('saveAngular', {
-                        label: 'Angular Save Plugin',
+                        label: 'Eingabe übernehmen',
                         command: 'blur',
                         icon: global_basepath + '/app/images/save.png'
                     });
@@ -45,10 +45,19 @@ backle.directive('ckedit', function ($parse) {
                         }
                     });
                     editor.ui.addButton('CancelAngular', {
-                        label: 'cancelAngular Plugin',
+                        label: 'Eingabe abbrechen',
                         command: 'cancel',
                         icon: global_basepath + '/app/images/cancel.png'
                     });
+                }
+            });
+
+            // the native blur-event seems to be faster
+            element.on('blur', function() {
+                if (e.editor.checkDirty()) {
+                    var ckValue = e.editor.getData();
+                    setter(scope, ckValue);
+                    e.editor.resetDirty();
                 }
             });
 
@@ -59,21 +68,12 @@ backle.directive('ckedit', function ($parse) {
                         e.editor.setData(resetdata);                            
                         $(':focus').blur();
                     }
-                },
-
-                blur: function (e) {
-                    if (e.editor.checkDirty()) {
-                        var ckValue = e.editor.getData();
-                        scope.$apply(function () {
-                            setter(scope, ckValue);
-                        });
-                        ckValue = null;
-                        e.editor.resetDirty();
-                    }
                 }
             };
+
             options.removePlugins = 'sourcearea,about';
             options.extraPlugins = 'newplugin,cancelAngular';
+            options.title = false;
             var editorangular = CKEDITOR.inline(element[0], options); //invoke
  
             scope.$watch(attrs.ckedit, function (value) {
