@@ -1,3 +1,5 @@
+CKEDITOR.timestamp=null;
+
 var backle = angular.module('backle', ['ngResource']);
 
 backle.directive('ckedit', function ($parse) {
@@ -107,26 +109,16 @@ backle.controller('DetailCtrl', ['$scope', '$http', '$sce', '$filter', function(
     $scope.alertHtmlMessage = undefined;
     $scope.alertType = undefined;
 
-    $scope.story = {};
+    $scope.story;
 
     $http.get($scope.storyUri).success(function(result) {
         $scope.story = result;
-    });
-    
-//    Story.query()
-//        .$promise.then(function(result) {
-//            $scope.story = result;
-//        },function(resultObjet) {
-//            console.log('error', resultObjet);
 
-//            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\"/backle/app/create.php?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
-//            $scope.alertType = 'alert alert-danger';
-//            $scope.backlogPresent = false;
-//        });
-
-    
-    $scope.$watchCollection('story', function(newValue, oldValue) {
-        $http.put($scope.storyUri, newValue);
+        $scope.$watch('story', function(newValue, oldValue) {
+            if (newValue !== oldValue) {
+                $http.put($scope.storyUri, newValue);
+            }
+        }, true);        
     });
 
 
