@@ -1,5 +1,8 @@
 backle.filter('dbDataToJs', function() {
   return function(input) {
+      if (input == undefined) {
+          return null;
+      }
       var t = String(input).split(/[- :]/);
       return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
   };
