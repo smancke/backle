@@ -5,6 +5,7 @@ backle.directive('ckedit', function ($parse) {
     var counter = 0,
     prefix = '__ckd_';
     var resetdata;
+    var EDITOR;
 
     return {
         restrict: 'A',
@@ -19,6 +20,7 @@ backle.directive('ckedit', function ($parse) {
  
             CKEDITOR.plugins.add('newplugin', {
                 init: function (editor) {
+                    EDITOR = editor;
                     editor.addCommand('blur', {
                         modes: { wysiwyg: 1, source: 1 },
                         exec: function (editor) {
@@ -27,7 +29,7 @@ backle.directive('ckedit', function ($parse) {
                     });
                     
                     editor.ui.addButton('saveAngular', {
-                        label: 'Angular Save Plugin',
+                        label: 'Eingabe übernehmen',
                         command: 'blur',
                         icon: global_basepath + '/app/images/save.png'
                     });
@@ -45,10 +47,23 @@ backle.directive('ckedit', function ($parse) {
                         }
                     });
                     editor.ui.addButton('CancelAngular', {
-                        label: 'cancelAngular Plugin',
+                        label: 'Eingabe abbrechen',
                         command: 'cancel',
                         icon: global_basepath + '/app/images/cancel.png'
                     });
+                }
+            });
+
+            // the native blur-event seems to be faster, with the one from the editor, 
+            // we loose updates in case of clicking on a link
+            element.on('blur', function() {
+                if (EDITOR.checkDirty()) {
+                    var ckValue = EDITOR.getData();
+                    scope.$apply(function () {
+                        setter(scope, ckValue);
+                    });
+                    //setter(scope, ckValue);
+                    EDITOR.resetDirty();
                 }
             });
 
@@ -59,21 +74,12 @@ backle.directive('ckedit', function ($parse) {
                         e.editor.setData(resetdata);                            
                         $(':focus').blur();
                     }
-                },
-
-                blur: function (e) {
-                    if (e.editor.checkDirty()) {
-                        var ckValue = e.editor.getData();
-                        scope.$apply(function () {
-                            setter(scope, ckValue);
-                        });
-                        ckValue = null;
-                        e.editor.resetDirty();
-                    }
                 }
             };
+
             options.removePlugins = 'sourcearea,about';
             options.extraPlugins = 'newplugin,cancelAngular';
+            options.title = false;
             var editorangular = CKEDITOR.inline(element[0], options); //invoke
  
             scope.$watch(attrs.ckedit, function (value) {

@@ -6,13 +6,12 @@ $app->backle->writeHead('the agile backlog',
 $app->backle->writePageHeader();
 
 ?>
-
   <div ng-controller="DetailCtrl">
       <br>
     <div class="container">
       <div class="">
         <a href="<?=cfg_basepath()?>/<?=$projectname?>"
-           class="btn btn-default btn-lg">
+           class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-chevron-left"></span> liste
         </a>
       </div>
@@ -20,12 +19,14 @@ $app->backle->writePageHeader();
         <div class="panel panel-default">
          <div class="panel-heading">
            <h3 id="headline"><div  style="display: inline-block; min-height: 28px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 10px"
-                                  contentEditable="{{permissions.write == 1}}"
-                                  ng-model="story.title"></div></h3>
+                                   contentEditable="{{permissions.write == 1}}"
+                                   ng-model="story.title"
+                                   maxlength="400"></div></h3>
 
            <div style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
                 contentEditable="{{permissions.write == 1}}"
-                ng-model="story.text"></div>
+                ng-model="story.text"
+                maxlength="800"></div>
           </div>
            <div class="panel-body">
             <div class="row">       
@@ -37,22 +38,24 @@ $app->backle->writePageHeader();
                 </div>
                 <div class="row">
                   <div class="col-xs-4"><strong>StoryPoints</strong></div>                   
-                  <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; margin: 0px; padding: 0px; padding-right: 6px"
+                  <div class="col-xs-3" style="display: inline-block; min-height: 18px; min-width: 100px; padding-right: 6px"
                        contentEditable="{{permissions.write == 1}}"
-                       ng-model="story.points"></div>
+                       ng-model="story.points"
+                       maxlength="3"
+                       numberonly></div>
                 </div>
                 <div class="row">
                   <!--<div class="col-xs-4"><strong>Author</strong></div> <div class="col-xs-3">smancke</div>-->
                 </div>
                 <br>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Erstellt</strong></div> <div class="col-xs-8">{{story.created}}</div>                
+                  <div class="col-xs-4"><strong>Erstellt</strong></div> <div class="col-xs-8">{{story.created | dbDataToJs | date:'medium'}}</div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Aktualisiert</strong></div> <div class="col-xs-8">{{story.changed}}</div>
+                  <div class="col-xs-4"><strong>Aktualisiert</strong></div> <div class="col-xs-8">{{story.changed | dbDataToJs | date:'medium'}}</div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-4"><strong>Erledigt</strong></div> <div class="col-xs-8">{{story.done}}</div>
+                  <div class="col-xs-4"><strong>Erledigt</strong></div> <div class="col-xs-8">{{story.done | dbDataToJs | date:'medium'}}</div>
                 </div>
 
               </div>

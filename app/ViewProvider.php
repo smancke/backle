@@ -13,6 +13,7 @@ class ViewProvider {
                 "/app/lib/ui/jquery-ui.js", 
                 "/app/lib/bootstrap.min.js",
                 "/app/lib/angular.min.js",
+                "/app/lib/angular-locale_de-de.js",
                 "/app/lib/angular-resource.min.js"];
     }
 
@@ -49,7 +50,7 @@ class ViewProvider {
         echo "    </script>\n";
     
         echo "  </head>\n";
-        echo "  <body style=\"overflow-y:auto\">\n";
+        echo "  <body>\n";
     
     }
 

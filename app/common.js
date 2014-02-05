@@ -1,3 +1,22 @@
+backle.filter('dbDataToJs', function() {
+  return function(input) {
+      var t = String(input).split(/[- :]/);
+      return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+  };
+});
+
+backle.directive('numberonly', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {            
+            elm.on('keypress', function(event) {
+                if (event.charCode == 0) // Enter, Del, Arrow-Key, etc.
+                    return true;                    
+                return event.charCode >= 48 && event.charCode <= 57;
+            });
+        }
+    }
+});
 
 backle.directive('contenteditable', function() {
     // fix for correct blur on webkit based browser
@@ -6,6 +25,8 @@ backle.directive('contenteditable', function() {
     return {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
+            
+            var maxlength = attrs.maxlength;
 
             var placeholderText = attrs.placeholder;
             if (placeholderText == undefined) {
@@ -41,6 +62,18 @@ backle.directive('contenteditable', function() {
                     elm.removeClass("placeholder");
                 }
             };
+
+            /**
+             * handling the maxlength parameter
+             */
+            elm.on('keypress', function(event) {
+                if (maxlength == undefined)
+                    return true;
+
+                if (event.charCode == 0) // Enter, Del, Arrow-Key, etc.
+                    return true;                    
+                return elm.text().length < maxlength;
+            });
             
             elm.on('keydown', function(event) {
                 if (event.keyCode == 13 && ! event.ctrlKey) { // Enter
