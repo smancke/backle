@@ -1,0 +1,3 @@
+Backle is currently packaged as Debian native package,
+from git snapshots. Later, when there will be formal
+releases, this should be switched to 3.0 (quilt) format.

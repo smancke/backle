@@ -18,4 +18,3 @@ db_input low backle/setup-username || true
 db_input low backle/setup-password || true
 
 db_go || true
-

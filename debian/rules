@@ -7,34 +7,37 @@ REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 build-arch:
 
 build: build-indep
-build-indep: build-stamp
-build-stamp:
-	dh_testdir
-	touch build-stamp
+build-indep:
 
-clean: 
+clean:
 	dh_testdir
+	# check for submodule existence
+	test -f app/SimpleOAuthLogin/README.md
+	test -f app/lib/ckeditor/README.md
 	dh_testroot
-	rm -f build-stamp
-	dh_clean 
+	dh_clean
 
-install: build
+binary-indep:
 	dh_testdir
 	dh_testroot
 	dh_prep
 	dh_installdirs
 	dh_install
-	rm \
-		debian/backle/usr/share/backle/www/api/.htaccess
-
-# Build architecture-independent files here.
-binary-indep: build install
-	dh_testdir
-	dh_testroot
+	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
-	dh_installdebconf	
+	dh_installdebconf
 	dh_installman
+	rm \
+		debian/backle/usr/share/backle/www/app/SimpleOAuthLogin/LICENSE \
+		debian/backle/usr/share/backle/www/app/lib/angular-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/bootstrap-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/ckeditor/LICENSE.md \
+		debian/backle/usr/share/backle/www/app/lib/jquery-LICENSE.txt \
+		debian/backle/usr/share/backle/www/app/lib/jquery-ui-LICENSE.txt \
+		debian/backle/usr/share/backle/www/lib/Slim/LICENSE \
+		debian/backle/usr/share/backle/www/lib/dbFacile/LICENSE.txt \
+		debian/backle/usr/share/backle/www/api/.htaccess
 	dh_lintian
 	dh_link
 	dh_compress
@@ -44,7 +47,6 @@ binary-indep: build install
 	dh_md5sums
 	dh_builddeb
 
-# Build architecture-dependent files here.
 binary-arch:
 
 binary: binary-indep binary-arch

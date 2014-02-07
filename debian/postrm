@@ -38,7 +38,7 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 		db_version 2.0
 
 		apache_remove $1
-		/etc/init.d/apache2 reload 3>/dev/null || true
+		invoke-rc.d apache2 reload 3>/dev/null || true
 
 	fi
 fi
@@ -47,5 +47,3 @@ fi
 #DEBHELPER#
 
 exit 0
-
-

@@ -6,7 +6,7 @@ set -e
 apache_install() {
 	mkdir -p /etc/apache2/conf-available
 	ln -sf ../../backle/apache.conf /etc/apache2/conf-available/backle.conf
-	
+
 	COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
 
 	if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
@@ -34,11 +34,10 @@ if [ "$1" = "configure" ]; then
 	db_version 2.0
 
 	apache_install $1
-        /etc/init.d/apache2 reload 3>/dev/null || true
+        invoke-rc.d apache2 reload 3>/dev/null || true
 fi
 
 
 #DEBHELPER#
 
 exit 0
-
