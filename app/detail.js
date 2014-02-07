@@ -31,7 +31,7 @@ backle.directive('ckedit', function ($parse) {
                     });
                     
                     editor.ui.addButton('saveAngular', {
-                        label: 'Eingabe übernehmen',
+                        label: 'Eingabe \u00FCbernehmen',
                         command: 'blur',
                         icon: global_basepath + '/app/images/save.png'
                     });

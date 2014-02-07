@@ -12,7 +12,7 @@ $app->backle->writePageHeader();
       <div class="">
         <a href="<?=cfg_basepath()?>/<?=$projectname?>"
            class="btn btn-default btn-sm">
-          <span class="glyphicon glyphicon-chevron-left"></span> liste
+          <span class="glyphicon glyphicon-chevron-left"></span> Liste
         </a>
       </div>
       <br>
