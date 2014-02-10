@@ -42,7 +42,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             $scope.backlogPresent = true;
             $scope.recalculateMilestonePoints();
         },function() {
-            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog '"+ $scope.backlogname + "' does not exist!</h3>Would you <strong><a href=\""+ global_basepath +"/c/create?backlogname="+ $scope.backlogname + "\">create "+ $scope.backlogname + "</a></strong>, now?");
+            $scope.alertHtmlMessage = $sce.trustAsHtml("<h3>Backlog not found!</h3>Either the backlog does not exist or you don't have adequate permissions.");
             $scope.alertType = 'alert alert-danger';
             $scope.backlogPresent = false;
         });
