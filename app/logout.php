@@ -11,7 +11,7 @@ if (isset($_GET['code'])) {
    if ($googleLogin->exchangeAuthCode($_GET['code'])) {
    
      $user = $googleLogin->getTokenInfo();
-     error_log('user: '.json_encode($user));
+
      if (property_exists($user, 'email')) {
        $cookieData = ['email' => $user->email,
                       //$user->user_id,

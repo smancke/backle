@@ -40,7 +40,6 @@ class GForgeAuthMW extends \Slim\Middleware
             // set the current user id for the backlog api
             $app->backlog->setUserId($app->userInfo['id']);
         }
-	error_log('app->backlog->getUserId(): '. $app->backlog->getUserId());
         
         // Run inner middleware and application
         $this->next->call();
