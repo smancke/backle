@@ -1,7 +1,7 @@
-backel
+backle
 ======
 
-backel is a smart backlog managment tool for agile projects.
+backle is a smart backlog managment tool for agile projects.
 The vision of backle is to become the doodle for backlogs.
 
 
