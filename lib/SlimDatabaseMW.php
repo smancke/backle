@@ -26,6 +26,10 @@ class SlimDatabaseMW extends \Slim\Middleware
         $app->db->open($this->cfg['dbname'], $this->cfg['dbuser'], $this->cfg['dbpassword'], $this->cfg['dbhost']);
         if ($this->cfg['dblogfile'])
             $app->db->setLogile($this->cfg['dblogfile']);
+
+        if ($this->cfg['dbtype'] == 'mysql')
+            $app->db->execute('SET SESSION SQL_MODE=\'ANSI_QUOTES\'');
+
                      
         $app->backlog = new Backlog($app->db);
 
