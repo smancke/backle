@@ -50,9 +50,10 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     $scope.moveStoryBefore = function(movingId, previousItemId) {
         data = {previousItem: previousItemId}
         $http.put(global_backlog_basepath +'/'+movingId+'/moveItemBehind', data);
-        var from = $scope.getStoryPosition(movingId);
+
+        var from = $scope.getStoryPosition($scope.backlogItems, movingId);
         var removedItem = $scope.backlogItems.splice(from, 1)[0];
-        var to = 1 + $scope.getStoryPosition(previousItemId);
+        var to = 1 + $scope.getStoryPosition($scope.backlogItems, previousItemId);
         $scope.backlogItems.splice(to, 0, removedItem);
     }
 
@@ -85,9 +86,9 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
     /**
      * Return the position within the list of stories
      */
-    $scope.getStoryPosition = function(storyId) {
-        for (var i=0; i<$scope.backlogItems.length; i++) {
-            if ($scope.backlogItems[i].id == storyId) {
+    $scope.getStoryPosition = function(items, storyId) {
+        for (var i=0; i<items.length; i++) {
+            if (items[i].id == storyId) {
                 return i;
             }
         }
@@ -112,7 +113,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
             if (placeBehindId) {
                 postData = {previousItem: placeBehindId}
                 $http.put(global_backlog_basepath +'/'+newItem.id+'/moveItemBehind', postData);
-                toPosition = $scope.getStoryPosition(placeBehindId) + 1;
+                toPosition = $scope.getStoryPosition($scope.backlogItems, placeBehindId) + 1;
             } 
             $scope.backlogItems.splice(toPosition, 0, newItem);
             window.setTimeout(function() {
@@ -207,6 +208,7 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
 
     if ($scope.permissions.write) {
         var previousElement;
+        var savedNodes;
         $( "#item-list" ).sortable({ 
             helper: 'clone',
             axis: 'y',  
@@ -218,16 +220,43 @@ backle.controller('ListCtrl', ['$scope', 'Backlog', '$http', '$sce', function($s
                 if (ui.item.prev().attr('id')) {
                     previousId = $scope.getStoryIdByElement(ui.item.prev());
                 } 
+                $(this).sortable('cancel');
+
+                savedNodes.detach();
+                // Put the nodes back exactly the way they started (this is very
+                // important because ng-repeat uses comment elements to delineate
+                // the start and stop of repeat sections and sortable doesn't
+                // respect their order (even if we cancel, the order of the
+                // comments are still messed up).
+                if ($(this).sortable('option','helper') === 'clone') {
+                    // restore all the savedNodes except .ui-sortable-helper element
+                    // (which is placed last). That way it will be garbage collected.
+                    savedNodes = savedNodes.not(savedNodes.last());
+                }
+                //$(this).empty();
+                savedNodes.appendTo($(this));
+                $(this).find(".ui-sortable-placeholder")[0].remove();
+
                 $scope.$apply(function() {
                     $scope.moveStoryBefore(movingId, previousId);
                 });
             },
             activate: function(event, ui) {
                 previousElement = ui.item.prev().attr('id');
+
+                // We need to make a copy of the current element's contents so
+                // we can restore it after sortable has messed it up.
+                // This is inside activate (instead of start) in order to save
+                // both lists when dragging between connected lists.
+                var focused = $(this).find(':focus')[0];
+                if (focused != undefined)
+                    focused.blur();
+                savedNodes = $(this).contents();
             },
             deactivate: function(event, ui) {
                 if (previousElement == ui.item.prev().attr('id')) {
                     var focusChild = ui.item.find(".backlog-item-title")[0];
+
                     focusChild.focus();
                 }
             },
