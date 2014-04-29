@@ -1,3 +1,9 @@
+backle (0~20140429) tarent; urgency=low
+
+  * fixed sync bug between ui sortable an angular repeat
+
+ -- Sebastian Mancke <s.mancke@tarent.de>  Fri, 29 Apr 2014 13:40:13 +0100
+
 backle (0~20140207) tarent; urgency=low
 
   * Fixes and usability enhancements
