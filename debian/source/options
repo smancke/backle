@@ -1,3 +1,4 @@
 compression = "gzip"
 compression-level = 9
-single-debian-patch
+# not for source/format 3.0 (native)
+#single-debian-patch
