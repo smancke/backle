@@ -1,8 +1,12 @@
 backle (0~20140429) tarent; urgency=low
 
+  [ Sebastian Mancke ]
   * fixed sync bug between ui sortable an angular repeat
 
- -- Sebastian Mancke <s.mancke@tarent.de>  Fri, 29 Apr 2014 13:40:13 +0100
+  [ Thorsten Glaser ]
+  * Fix several lintian warnings
+
+ -- Thorsten Glaser <t.glaser@tarent.de>  Tue, 29 Apr 2014 12:27:19 +0200
 
 backle (0~20140207) tarent; urgency=low
 

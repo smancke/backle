@@ -20,5 +20,5 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
 Recommends: apache2
 Suggests: postgresql
 Description: agile backlog management tool
- backle is a smart backlog managment tool for agile projects.
+ backle is a smart backlog management tool for agile projects.
  The vision of backle is to become the doodle for backlogs.
